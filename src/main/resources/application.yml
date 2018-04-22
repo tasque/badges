@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: ${BADGES_APP_DATASOURCE_URL}
+    username: ${BADGES_APP_DATASOURCE_USERNAME}
+    password: ${BADGES_APP_DATASOURCE_PASSWORD}
+  liquibase:
+    change-log: classpath:liquibase/changes.xml
+  jpa:
+    properties:
+      hibernate.temp.use_jdbc_metadata_defaults: false
