@@ -19,6 +19,6 @@ public class EmployeesController {
 
     @GetMapping
     public List<Employee> getById(@RequestParam(defaultValue = "") String name) {
-        return employeeRepository.findByNameContainingIgnoreCase(name);
+        return employeeRepository.findByNameContainingIgnoreCaseAndEnabledIsFalse(name);
     }
 }

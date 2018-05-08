@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="Pavel N" id="initial 9 - made companies">
+        <createTable tableName="company">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="image_url" type="VARCHAR(255)"/>
+            <column name="auto_join" type="BOOLEAN"/>
+            <column name="creator_id" type="BIGINT">
+                <constraints referencedColumnNames="id"
+                             referencedTableName="employee"
+                             nullable="false"
+                             foreignKeyName="fk_co_emp"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="initial 10 - insert first company" author="Pavel N">
+        <insert tableName="company">
+            <column name="name" value="Freemasonry"/>
+            <column name="description" value=""/>
+            <column name="image_url">
+                https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Square_compasses.svg/138px-Square_compasses.svg.png
+            </column>
+            <column name="auto_join" value="true"/>
+            <column name="creator_id" valueComputed="(select id from employee where name = 'Pavel Novolodskiy')"/>
+
+        </insert>
+    </changeSet>
+
+    <changeSet author="Pavel N" id="initial 11 - link company with news">
+        <addColumn tableName="news">
+            <column name="company_id" type="BIGINT">
+                <constraints referencedTableName="company"
+                             referencedColumnNames="id"
+                             foreignKeyName="fk_news_company"
+                             nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+
+    <changeSet author="Pavel N" id="initial 12 - link company with badges">
+        <addColumn tableName="badge">
+            <column name="company_id" type="BIGINT">
+                <constraints referencedTableName="company"
+                             referencedColumnNames="id"
+                             foreignKeyName="fk_badge_company"
+                             nullable="true"/>
+            </column>
+        </addColumn>
+        <update tableName="badge">
+            <column name="company_id" valueComputed="(select id from company)"/>
+        </update>
+        <addNotNullConstraint tableName="badge" columnName="company_id"/>
+    </changeSet>
+
+
+    <changeSet author="Pavel N" id="initial 13 - link company with employees">
+        <addColumn tableName="employee">
+            <column name="company_id" type="BIGINT">
+                <constraints referencedTableName="company"
+                             referencedColumnNames="id"
+                             foreignKeyName="fk_employee_company"
+                             nullable="true"/>
+            </column>
+        </addColumn>
+        <update tableName="employee">
+            <column name="company_id" valueComputed="(select id from company)"/>
+        </update>
+        <addNotNullConstraint tableName="employee" columnName="company_id"/>
+    </changeSet>
+
+    <changeSet author="Pavel N" id="initial 14 - link company with badge_assignment">
+        <addColumn tableName="badge_assignment">
+            <column name="company_id" type="BIGINT">
+                <constraints referencedTableName="company"
+                             referencedColumnNames="id"
+                             foreignKeyName="fk_badge_assignment_company"
+                             nullable="true"/>
+            </column>
+        </addColumn>
+        <update tableName="badge_assignment">
+            <column name="company_id" valueComputed="(select id from company)"/>
+        </update>
+        <addNotNullConstraint tableName="badge_assignment" columnName="company_id"/>
+    </changeSet>
+
+
+</databaseChangeLog>

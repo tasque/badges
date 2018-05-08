@@ -8,3 +8,4 @@ spring:
   jpa:
     properties:
       hibernate.temp.use_jdbc_metadata_defaults: false
+    show-sql: true

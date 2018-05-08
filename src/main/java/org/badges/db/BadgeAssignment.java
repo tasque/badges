@@ -37,4 +37,7 @@ public class BadgeAssignment {
     private String comment;
 
     private String tags;
+
+    @ManyToOne
+    private Company company;
 }

@@ -38,6 +38,7 @@ public class BadgeAssignmentController {
         badgeAssignment.setBadge(badgeRepository.getOne(importBadgeAssignment.getBadgeId()));
         badgeAssignment.setToEmployees(new HashSet<>(
                 employeeRepository.findAllById(importBadgeAssignment.getEmployeesIds())));
+        badgeAssignmentRepository.save(badgeAssignment);
 
 
         return newsService.prepareNews(badgeAssignment);

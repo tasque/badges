@@ -21,6 +21,7 @@ public class NewsService {
         news.setNewsType(NewsType.BADGE_ASSIGNMENT);
         news.setTags(badgeAssignment.getTags());
         news.setToEmployees(badgeAssignment.getToEmployees());
+        news.setCompany(badgeAssignment.getAssigner().getCompany());
 
         return newsRepository.save(news);
     }

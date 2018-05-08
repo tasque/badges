@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="Pavel N" id="initial 5 - you can assign badges">
+        <createTable tableName="badge_assignment">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="comment" type="TEXT"/>
+            <column name="tags" type="TEXT"/>
+            <column name="badge_id" type="BIGINT">
+                <constraints referencedTableName="badge"
+                             referencedColumnNames="id"
+                             nullable="false"
+                             foreignKeyName="fk_ba_b"/>
+            </column>
+            <column name="assigner_id" type="BIGINT">
+                <constraints referencedTableName="employee"
+                             referencedColumnNames="id"
+                             nullable="false"
+                             foreignKeyName="fk_ba_ass_e"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="Pavel N" id="initial 6 - badge assignment for eployees">
+        <createTable tableName="employee_badge_assignment">
+            <column name="badge_assignment_id" type="BIGINT">
+                <constraints referencedColumnNames="id"
+                             referencedTableName="badge_assignment"
+                             nullable="false"
+                             foreignKeyName="fk_eb_ba"/>
+            </column>
+            <column name="employee_id" type="BIGINT">
+                <constraints referencedTableName="employee"
+                             referencedColumnNames="id"
+                             nullable="false"
+                             foreignKeyName="fk_eb_to_e"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="employee_badge_assignment"
+                             columnNames="badge_assignment_id, employee_id"/>
+    </changeSet>
+
+
+
+</databaseChangeLog>

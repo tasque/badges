@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import java.util.Set;
 
 @Data
@@ -20,6 +21,8 @@ public class Employee {
 
     private String name;
 
+    private String email;
+
     private String description;
 
     private String address;
@@ -28,6 +31,11 @@ public class Employee {
 
     private String imageUrl;
 
-    @ManyToMany(mappedBy = "toEmployees", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "toEmployees")
     private Set<BadgeAssignment> badgeAssignments;
+
+    @ManyToOne
+    private Company company;
+
+    private boolean enabled;
 }
