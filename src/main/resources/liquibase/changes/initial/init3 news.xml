@@ -15,17 +15,19 @@
             <column name="tags" type="TEXT"/>
             <column name="image_url" type="VARCHAR(255)"/>
             <column name="news_type" type="VARCHAR(255)"/>
+            <column name="entity_id" type="BIGINT"/>
             <column name="author_id" type="BIGINT">
                 <constraints referencedColumnNames="id"
                              referencedTableName="employee"
                              foreignKeyName="fk_news_author"
                              nullable="false"/>
             </column>
+            <column name="deleted" type="BOOLEAN" defaultValue="false"/>
         </createTable>
     </changeSet>
 
 
-    <changeSet author="Pavel N" id="initial 8 - employyes for news">
+    <changeSet author="Pavel N" id="initial 8 - employees for news">
         <createTable tableName="employee_news">
             <column name="news_id" type="BIGINT">
                 <constraints referencedColumnNames="id"
@@ -44,5 +46,15 @@
                              columnNames="news_id, employee_id"/>
     </changeSet>
 
+    <changeSet id="initial 8 - news for badge assignment" author="Pavel N">
+        <addColumn tableName="badge_assignment">
+            <column name="news_id" type="BIGINT">
+                <constraints foreignKeyName="fk_news_badge_assignment"
+                             referencedTableName="news"
+                             referencedColumnNames="id"
+                             nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

@@ -18,7 +18,7 @@
             <column name="image_url" type="VARCHAR(255)"/>
             <column name="enabled" type="BOOLEAN"/>
             <column name="deleted" type="BOOLEAN"/>
-            <column name="version" type="INT"/>
+            <column name="version" type="INT" defaultValue="0"/>
         </createTable>
     </changeSet>
 
@@ -27,6 +27,7 @@
         <insert tableName="badge">
             <column name="name" value="Welcome!"/>
             <column name="enabled" value="true"/>
+            <column name="deleted" value="false"/>
         </insert>
     </changeSet>
 

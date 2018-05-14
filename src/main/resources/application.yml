@@ -9,3 +9,16 @@ spring:
     properties:
       hibernate.temp.use_jdbc_metadata_defaults: false
     show-sql: true
+
+security:
+  oauth2:
+    client:
+      clientId: 1822033224766752
+      clientSecret: ...
+      accessTokenUri: https://graph.facebook.com/oauth/access_token
+      userAuthorizationUri: https://www.facebook.com/dialog/oauth
+      tokenName: oauth_token
+      authenticationScheme: query
+      clientAuthenticationScheme: form
+    resource:
+      userInfoUri: https://graph.facebook.com/me

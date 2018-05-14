@@ -1,10 +1,12 @@
 package org.badges.db;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,9 +14,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
-public class Company {
+public class Company extends BaseEntity {
 
 
     @Id
@@ -27,7 +30,7 @@ public class Company {
 
     private boolean autoJoin;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Employee creator;
 
     @LazyCollection(LazyCollectionOption.EXTRA)
@@ -35,4 +38,9 @@ public class Company {
     private Set<Employee> employees;
 
     private String imageUrl;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
 }

@@ -1,6 +1,8 @@
 package org.badges.db;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.Version;
 
 import javax.persistence.Entity;
@@ -10,9 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
+@Setter
 @Entity
-public class Badge {
+@Where(clause = "deleted=false")
+public class Badge extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,5 +38,10 @@ public class Badge {
 
     @Version
     private int version;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
 
 }
