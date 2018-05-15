@@ -1,6 +1,7 @@
 # Compiled class file
 *.class
-
+front/dist
+front/node_modules
 # Log file
 *.log
 *.iml
