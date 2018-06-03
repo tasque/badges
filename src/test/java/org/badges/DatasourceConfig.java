@@ -3,8 +3,7 @@ package org.badges;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
-import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -13,15 +12,20 @@ import java.io.IOException;
 public class DatasourceConfig {
 
 
+    @Bean(/*initMethod = "start", */destroyMethod = "close")
+    public PostgreSQLContainer postgresContainer() {
+        PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer();
+        postgreSQLContainer.start();
+        return postgreSQLContainer;
+    }
+
     @Bean
-    public DataSource dataSource() throws IOException {
-        EmbeddedPostgres embeddedPostgres = new EmbeddedPostgres();
-        embeddedPostgres.start();
+    public DataSource dataSource(PostgreSQLContainer postgresContainer) throws IOException {
 
         return DataSourceBuilder.create()
-                .url(embeddedPostgres.getConnectionUrl().get())
-                .password("postgres")
-                .username("postgres")
+                .url(postgresContainer.getJdbcUrl())
+                .password(postgresContainer.getPassword())
+                .username(postgresContainer.getUsername())
                 .build();
     }
 }
