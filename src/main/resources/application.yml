@@ -1,4 +1,6 @@
 spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
   datasource:
     url: ${BADGES_APP_DATASOURCE_URL}
     username: ${BADGES_APP_DATASOURCE_USERNAME}
@@ -8,7 +10,7 @@ spring:
   jpa:
     properties:
       hibernate.temp.use_jdbc_metadata_defaults: false
-    show-sql: true
+    show-sql: false
 
 security:
   oauth2:

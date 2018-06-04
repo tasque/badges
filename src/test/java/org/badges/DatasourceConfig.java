@@ -12,11 +12,9 @@ import java.io.IOException;
 public class DatasourceConfig {
 
 
-    @Bean(/*initMethod = "start", */destroyMethod = "close")
+    @Bean(initMethod = "start", destroyMethod = "close")
     public PostgreSQLContainer postgresContainer() {
-        PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer();
-        postgreSQLContainer.start();
-        return postgreSQLContainer;
+        return new PostgreSQLContainer();
     }
 
     @Bean
