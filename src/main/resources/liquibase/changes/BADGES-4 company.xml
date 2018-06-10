@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet author="Pavel N" id="initial 9 - made companies">
+    <changeSet author="Pavel N" id="BADGES-4-1 - made companies">
         <createTable tableName="company">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true"/>
@@ -26,7 +26,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="initial 10 - insert first company" author="Pavel N">
+    <changeSet id="BADGES-4-2 - insert first company" author="Pavel N">
         <insert tableName="company">
             <column name="name" value="Freemasonry"/>
             <column name="description" value=""/>
@@ -39,7 +39,7 @@
         </insert>
     </changeSet>
 
-    <changeSet author="Pavel N" id="initial 11 - link company with news">
+    <changeSet author="Pavel N" id="BADGES-4-3 - link company with news">
         <addColumn tableName="news">
             <column name="company_id" type="BIGINT">
                 <constraints referencedTableName="company"
@@ -51,7 +51,7 @@
     </changeSet>
 
 
-    <changeSet author="Pavel N" id="initial 12 - link company with badges">
+    <changeSet author="Pavel N" id="BADGES-4-4 - link company with badges">
         <addColumn tableName="badge">
             <column name="company_id" type="BIGINT">
                 <constraints referencedTableName="company"
@@ -67,7 +67,7 @@
     </changeSet>
 
 
-    <changeSet author="Pavel N" id="initial 13 - link company with employees">
+    <changeSet author="Pavel N" id="BADGES-4-5 - link company with employees">
         <addColumn tableName="employee">
             <column name="company_id" type="BIGINT">
                 <constraints referencedTableName="company"
@@ -82,7 +82,7 @@
         <addNotNullConstraint tableName="employee" columnName="company_id"/>
     </changeSet>
 
-    <changeSet author="Pavel N" id="initial 14 - link company with badge_assignment">
+    <changeSet author="Pavel N" id="BADGES-4-6 - link company with badge_assignment">
         <addColumn tableName="badge_assignment">
             <column name="company_id" type="BIGINT">
                 <constraints referencedTableName="company"

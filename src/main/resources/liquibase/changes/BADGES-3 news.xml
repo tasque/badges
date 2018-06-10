@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet author="Pavel N" id="initial 7 - news">
+    <changeSet author="Pavel N" id="BADGES-3-1 - news">
         <createTable tableName="news">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true"/>
@@ -27,7 +27,7 @@
     </changeSet>
 
 
-    <changeSet author="Pavel N" id="initial 8 - employees for news">
+    <changeSet author="Pavel N" id="BADGES-3-2 - employees for news">
         <createTable tableName="employee_news">
             <column name="news_id" type="BIGINT">
                 <constraints referencedColumnNames="id"
@@ -46,7 +46,7 @@
                              columnNames="news_id, employee_id"/>
     </changeSet>
 
-    <changeSet id="initial 8 - news for badge assignment" author="Pavel N">
+    <changeSet id="BADGES-3-3 - news for badge assignment" author="Pavel N">
         <addColumn tableName="badge_assignment">
             <column name="news_id" type="BIGINT">
                 <constraints foreignKeyName="fk_news_badge_assignment"

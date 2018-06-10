@@ -9,7 +9,7 @@ import org.badges.db.News;
 import org.badges.db.repository.BadgeAssignmentRepository;
 import org.badges.db.repository.BadgeRepository;
 import org.badges.db.repository.EmployeeRepository;
-import org.badges.security.TenantContext;
+import org.badges.security.RequestContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -44,7 +44,7 @@ public class BadgeAssignmentServiceTest {
     private EmployeeRepository employeeRepository;
 
     @Mock
-    private TenantContext tenantContext;
+    private RequestContext requestContext;
 
     @Captor
     private ArgumentCaptor<BadgeAssignment> captor;
@@ -52,7 +52,7 @@ public class BadgeAssignmentServiceTest {
     @Test
     public void shouldSaveBadgeAssignmentWithNews() {
         // given
-        when(tenantContext.getCurrentCompany()).thenReturn(new Company().setId(1L));
+        when(requestContext.getCurrentTenant()).thenReturn(new Company().setId(1L));
         ImportBadgeAssignment assignment = new ImportBadgeAssignment().setComment("comment")
                 .setBadgeId(2L)
                 .setAssignerId(3L)

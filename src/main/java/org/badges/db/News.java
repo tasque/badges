@@ -76,8 +76,8 @@ public class News extends BaseEntity {
 
     public NewsDto transformToDto() {
         return new NewsDto().setId(id)
-                .setAuthor(author != null ? author.transformToDto() : null)
-                .setToEmployees(toEmployees.stream().map(Employee::transformToDto).collect(Collectors.toList()))
+                .setAuthor(author != null ? author.transformToNewsDto() : null)
+                .setToEmployees(toEmployees.stream().map(Employee::transformToNewsDto).collect(Collectors.toList()))
                 .setEntityId(entityId)
                 .setNewsType(newsType)
                 .setComment(comment);

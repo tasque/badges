@@ -13,6 +13,8 @@ spring:
     show-sql: false
 
 security:
+  ldap:
+    enabled: false
   oauth2:
     client:
       clientId: 1822033224766752

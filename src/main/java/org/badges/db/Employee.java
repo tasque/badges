@@ -51,7 +51,7 @@ public class Employee extends BaseEntity {
     }
 
 
-    public EmployeeDto transformToDto() {
+    public EmployeeDto transformToNewsDto() {
         return new EmployeeDto().setId(id)
                 .setEmail(email)
                 .setImageUrl(imageUrl)

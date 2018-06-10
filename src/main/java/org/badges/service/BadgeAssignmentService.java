@@ -7,7 +7,7 @@ import org.badges.db.News;
 import org.badges.db.repository.BadgeAssignmentRepository;
 import org.badges.db.repository.BadgeRepository;
 import org.badges.db.repository.EmployeeRepository;
-import org.badges.security.TenantContext;
+import org.badges.security.RequestContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -25,7 +25,7 @@ public class BadgeAssignmentService {
 
     private final NewsService newsService;
 
-    private final TenantContext tenantContext;
+    private final RequestContext requestContext;
 
     public News assignBadge(@RequestBody ImportBadgeAssignment importBadgeAssignment) {
 
@@ -36,7 +36,7 @@ public class BadgeAssignmentService {
         badgeAssignment.setBadge(badgeRepository.getOne(importBadgeAssignment.getBadgeId()));
         badgeAssignment.setToEmployees(new HashSet<>(
                 employeeRepository.findAllById(importBadgeAssignment.getEmployeesIds())));
-        badgeAssignment.setCompany(tenantContext.getCurrentCompany());
+        badgeAssignment.setCompany(requestContext.getCurrentTenant());
         badgeAssignmentRepository.save(badgeAssignment);
 
 

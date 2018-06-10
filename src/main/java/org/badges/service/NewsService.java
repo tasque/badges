@@ -5,7 +5,7 @@ import org.badges.db.BadgeAssignment;
 import org.badges.db.News;
 import org.badges.db.NewsType;
 import org.badges.db.repository.NewsRepository;
-import org.badges.security.TenantContext;
+import org.badges.security.RequestContext;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -16,7 +16,7 @@ public class NewsService {
 
     private final NewsRepository newsRepository;
 
-    private final TenantContext tenantContext;
+    private final RequestContext requestContext;
 
     public News prepareNews(BadgeAssignment badgeAssignment) {
         News news = new News();
@@ -29,7 +29,7 @@ public class NewsService {
 //        news.setEntity(badgeAssignment);
         news.setTags(badgeAssignment.getTags());
         news.setToEmployees(new HashSet<>(badgeAssignment.getToEmployees()));
-        news.setCompany(tenantContext.getCurrentCompany());
+        news.setCompany(requestContext.getCurrentTenant());
 
         return newsRepository.save(news);
     }

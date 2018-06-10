@@ -8,7 +8,7 @@ import org.badges.db.Employee;
 import org.badges.db.News;
 import org.badges.db.NewsType;
 import org.badges.db.repository.NewsRepository;
-import org.badges.security.TenantContext;
+import org.badges.security.RequestContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -30,7 +30,7 @@ public class NewsServiceTest {
     private NewsRepository newsRepository;
 
     @Mock
-    private TenantContext tenantContext;
+    private RequestContext requestContext;
 
     @Test
     public void shouldSaveNewsProperly() {
@@ -41,7 +41,7 @@ public class NewsServiceTest {
                 .setToEmployees(Sets.newHashSet(new Employee().setId(2L), new Employee().setId(3L)))
                 .setId(1L);
         when(newsRepository.save(any(News.class))).then(invocation -> invocation.getArguments()[0]);
-        when(tenantContext.getCurrentCompany()).thenReturn(new Company().setId(4L));
+        when(requestContext.getCurrentTenant()).thenReturn(new Company().setId(4L));
 
         // when
         News result = newsService.prepareNews(badgeAssignment);

@@ -6,7 +6,7 @@ import org.badges.api.domain.NewsDto;
 import org.badges.db.Company;
 import org.badges.db.News;
 import org.badges.db.repository.NewsRepository;
-import org.badges.security.TenantContext;
+import org.badges.security.RequestContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class BadgeAssignmentTest {
     private NewsRepository newsRepository;
 
     @MockBean
-    private TenantContext tenantContext;
+    private RequestContext requestContext;
 
 
     @Test
@@ -41,7 +41,7 @@ public class BadgeAssignmentTest {
                 .setComment("new comment")
                 .addEmployees(2L, 3L)
                 .setAssignerId(1L);
-        when(tenantContext.getCurrentCompany()).thenReturn(new Company().setId(1L));
+        when(requestContext.getCurrentTenant()).thenReturn(new Company().setId(1L));
 
         // when
         ResponseEntity<NewsDto> response = restTemplate.postForEntity("/api/badges/assign", assignment, NewsDto.class);
