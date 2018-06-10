@@ -14,9 +14,9 @@ public class BadgesApplicationTest {
     @Autowired
     private BadgeRepository badgeRepository;
 
+
     @Test
     public void contextLoads() {
-
     }
 
 }

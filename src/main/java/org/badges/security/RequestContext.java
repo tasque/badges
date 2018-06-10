@@ -1,5 +1,6 @@
 package org.badges.security;
 
+import org.badges.db.BaseEntity;
 import org.badges.db.Company;
 import org.badges.db.Employee;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ public class RequestContext {
         if (employee != null) {
             return employee.getCompany();
         }
-        return null;
+        throw new TenantException("Tenant doesn't specified");
     }
 
     public Employee getCurrentEmployee() {
@@ -31,6 +32,12 @@ public class RequestContext {
 
     void clear() {
         currentEmployee.remove();
+    }
+
+    public void checkTenant(BaseEntity company) {
+        if (company == null || !company.getId().equals(getCurrentTenant().getId())) {
+            throw new TenantException(company + " does not match for current company");
+        }
     }
 
 }

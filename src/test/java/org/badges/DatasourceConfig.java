@@ -7,7 +7,6 @@ import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres;
 import ru.yandex.qatools.embed.postgresql.config.AbstractPostgresConfig;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 
 @Configuration
 public class DatasourceConfig {
@@ -19,7 +18,7 @@ public class DatasourceConfig {
     }
 
     @Bean
-    public DataSource dataSource(EmbeddedPostgres embeddedPostgres) throws IOException {
+    public DataSource dataSource(EmbeddedPostgres embeddedPostgres) {
         AbstractPostgresConfig.Credentials credentials = embeddedPostgres.getConfig().get().credentials();
 
         return DataSourceBuilder.create()

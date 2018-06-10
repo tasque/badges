@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -34,6 +35,7 @@ public class Badge extends BaseEntity {
     private boolean deleted;
 
     @ManyToOne
+    @NotNull
     private Company company;
 
     @Version
