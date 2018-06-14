@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/tasque/badges.svg?branch=master)](https://travis-ci.org/tasque/badges)
+
+
 ## Recognition tool
 where people can say thank you to each other
 
