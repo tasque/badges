@@ -1,7 +1,6 @@
 package org.badges.api.controller.query;
 
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 public class NewsQueryParams extends PageRequest {
