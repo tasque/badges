@@ -2,7 +2,7 @@ package org.badges.db;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.badges.api.domain.NewsDto;
+import org.badges.api.domain.news.NewsDto;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -74,12 +74,4 @@ public class News extends BaseEntity {
     }
 
 
-    public NewsDto transformToDto() {
-        return new NewsDto().setId(id)
-                .setAuthor(author != null ? author.transformToNewsDto() : null)
-                .setToEmployees(toEmployees.stream().map(Employee::transformToNewsDto).collect(Collectors.toList()))
-                .setEntityId(entityId)
-                .setNewsType(newsType)
-                .setComment(comment);
-    }
 }

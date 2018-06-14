@@ -1,4 +1,4 @@
-package org.badges.api.domain;
+package org.badges.api.domain.news;
 
 import lombok.Data;
 import org.badges.db.NewsType;
@@ -16,9 +16,9 @@ public class NewsDto {
 
     private String comment;
 
-    private List<EmployeeDto> toEmployees;
+    private List<EmployeeNewsDto> toEmployees;
 
-    private EmployeeDto author;
+    private EmployeeNewsDto author;
 
     private List<String> tags;
 }

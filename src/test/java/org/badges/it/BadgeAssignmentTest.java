@@ -2,7 +2,7 @@ package org.badges.it;
 
 
 import org.badges.api.domain.ImportBadgeAssignment;
-import org.badges.api.domain.NewsDto;
+import org.badges.api.domain.news.NewsDto;
 import org.badges.db.Company;
 import org.badges.db.News;
 import org.badges.db.repository.NewsRepository;

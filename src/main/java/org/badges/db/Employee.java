@@ -50,12 +50,4 @@ public class Employee extends BaseEntity {
         return id;
     }
 
-
-    public EmployeeDto transformToNewsDto() {
-        return new EmployeeDto().setId(id)
-                .setEmail(email)
-                .setImageUrl(imageUrl)
-                .setTitle(title)
-                .setName(name);
-    }
 }
