@@ -36,7 +36,6 @@ public class BadgeAssignmentService {
         badgeAssignment.setBadge(badgeRepository.getOne(importBadgeAssignment.getBadgeId()));
         badgeAssignment.setToEmployees(new HashSet<>(
                 employeeRepository.findAllById(importBadgeAssignment.getEmployeesIds())));
-        badgeAssignment.setCompany(requestContext.getCurrentTenant());
         badgeAssignmentRepository.save(badgeAssignment);
 
 

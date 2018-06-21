@@ -3,7 +3,6 @@ package org.badges.service;
 import org.badges.api.domain.ImportBadgeAssignment;
 import org.badges.db.Badge;
 import org.badges.db.BadgeAssignment;
-import org.badges.db.Company;
 import org.badges.db.Employee;
 import org.badges.db.News;
 import org.badges.db.repository.BadgeAssignmentRepository;
@@ -52,7 +51,6 @@ public class BadgeAssignmentServiceTest {
     @Test
     public void shouldSaveBadgeAssignmentWithNews() {
         // given
-        when(requestContext.getCurrentTenant()).thenReturn(new Company().setId(1L));
         ImportBadgeAssignment assignment = new ImportBadgeAssignment().setComment("comment")
                 .setBadgeId(2L)
                 .setAssignerId(3L)
@@ -73,6 +71,5 @@ public class BadgeAssignmentServiceTest {
         assertThat(value.getComment(), is("comment"));
         assertThat(value.getBadge().getId(), is(2L));
         assertThat(value.getToEmployees().size(), is(2));
-        assertThat(value.getCompany().getId(), is(1L));
     }
 }

@@ -41,9 +41,6 @@ public class BadgeAssignment extends BaseEntity {
     private String tags;
 
     @ManyToOne
-    private Company company;
-
-    @ManyToOne
     private News news;
 
     @Override

@@ -34,10 +34,6 @@ public class Badge extends BaseEntity {
 
     private boolean deleted;
 
-    @ManyToOne
-    @NotNull
-    private Company company;
-
     @Version
     private int version;
 

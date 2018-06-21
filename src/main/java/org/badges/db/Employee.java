@@ -39,10 +39,6 @@ public class Employee extends BaseEntity {
     @ManyToMany(mappedBy = "toEmployees")
     private Set<BadgeAssignment> badgeAssignments;
 
-    @ManyToOne
-    @NotNull
-    private Company company;
-
     private boolean enabled;
 
     @Override

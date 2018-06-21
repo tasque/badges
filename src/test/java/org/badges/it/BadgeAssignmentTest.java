@@ -3,7 +3,6 @@ package org.badges.it;
 
 import org.badges.api.domain.ImportBadgeAssignment;
 import org.badges.api.domain.news.NewsDto;
-import org.badges.db.Company;
 import org.badges.db.News;
 import org.badges.db.repository.NewsRepository;
 import org.badges.security.RequestContext;
@@ -18,7 +17,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "classpath:/application.properties")
@@ -41,7 +39,6 @@ public class BadgeAssignmentTest {
                 .setComment("new comment")
                 .addEmployees(2L, 3L)
                 .setAssignerId(1L);
-        when(requestContext.getCurrentTenant()).thenReturn(new Company().setId(1L));
 
         // when
         ResponseEntity<NewsDto> response = restTemplate.postForEntity("/api/badges/assign", assignment, NewsDto.class);

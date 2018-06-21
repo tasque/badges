@@ -3,7 +3,6 @@ package org.badges.service;
 import com.google.common.collect.Sets;
 import org.badges.db.Badge;
 import org.badges.db.BadgeAssignment;
-import org.badges.db.Company;
 import org.badges.db.Employee;
 import org.badges.db.News;
 import org.badges.db.NewsType;
@@ -41,7 +40,6 @@ public class NewsServiceTest {
                 .setToEmployees(Sets.newHashSet(new Employee().setId(2L), new Employee().setId(3L)))
                 .setId(1L);
         when(newsRepository.save(any(News.class))).then(invocation -> invocation.getArguments()[0]);
-        when(requestContext.getCurrentTenant()).thenReturn(new Company().setId(4L));
 
         // when
         News result = newsService.prepareNews(badgeAssignment);
@@ -50,7 +48,6 @@ public class NewsServiceTest {
         assertThat(result.getComment(), is("comment"));
         assertThat(result.getNewsType(), is(NewsType.BADGE_ASSIGNMENT));
         assertThat(result.getEntityId(), is(1L));
-        assertThat(result.getCompany().getId(), is(4L));
         assertThat(result.getToEmployees().size(), is(2));
         assertThat(result.getAuthor().getId(), is(1L));
     }

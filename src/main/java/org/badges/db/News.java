@@ -48,10 +48,6 @@ public class News extends BaseEntity {
 
     private String tags;
 
-    @ManyToOne
-    @NotNull
-    private Company company;
-
     @BatchSize(size = 20)
     @Fetch(FetchMode.SELECT)
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

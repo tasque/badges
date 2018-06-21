@@ -1,7 +1,6 @@
 package org.badges.api.domain.admin;
 
 import lombok.Data;
-import org.badges.api.domain.CompanyDto;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.Min;
@@ -24,9 +23,6 @@ public class AdminBadge {
     private String imageUrl;
 
     private boolean enabled;
-
-    @NotNull
-    private CompanyDto company;
 
     @NotNull
     @Min(0)

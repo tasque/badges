@@ -29,7 +29,6 @@ public class NewsService {
 //        news.setEntity(badgeAssignment);
         news.setTags(badgeAssignment.getTags());
         news.setToEmployees(new HashSet<>(badgeAssignment.getToEmployees()));
-        news.setCompany(requestContext.getCurrentTenant());
 
         return newsRepository.save(news);
     }
