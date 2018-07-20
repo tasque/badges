@@ -10,7 +10,7 @@ import java.util.Set;
 @Data
 public class ImportBadgeAssignment {
 
-    private Set<Long> employeesIds;
+    private Set<Long> usersIds;
 
     private Long badgeId;
 
@@ -20,11 +20,11 @@ public class ImportBadgeAssignment {
 
     private List<String> tags;
 
-    public ImportBadgeAssignment addEmployees(Long... ids) {
-        if (employeesIds == null) {
-            employeesIds = new HashSet<>(ids.length);
+    public ImportBadgeAssignment addUsers(Long... ids) {
+        if (usersIds == null) {
+            usersIds = new HashSet<>(ids.length);
         }
-        Collections.addAll(employeesIds, ids);
+        Collections.addAll(usersIds, ids);
         return this;
     }
 }

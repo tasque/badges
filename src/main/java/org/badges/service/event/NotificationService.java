@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class NotificationService {
 
-    public void notifyEmployees(News news) {
+    public void notifyUsers(News news) {
 
     }
 }

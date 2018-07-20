@@ -19,7 +19,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "classpath:/application.properties")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+//        , properties = "classpath:/application.properties"
+)
 public class BadgeAssignmentTest {
 
     @Autowired
@@ -37,7 +39,7 @@ public class BadgeAssignmentTest {
         // given
         ImportBadgeAssignment assignment = new ImportBadgeAssignment().setBadgeId(1L)
                 .setComment("new comment")
-                .addEmployees(2L, 3L)
+                .addUsers(2L, 3L)
                 .setAssignerId(1L);
 
         // when
@@ -45,9 +47,9 @@ public class BadgeAssignmentTest {
 
         // then
         NewsDto body = response.getBody();
-        News dbNews = newsRepository.findById(body.getId()).get();
+        News dbNews = newsRepository.findOne(body.getId());
         assertThat(body.getComment(), is(dbNews.getComment()));
-        assertThat(body.getToEmployees().size(), is(dbNews.getToEmployees().size()));
+        assertThat(body.getToUsers().size(), is(dbNews.getToUsers().size()));
         assertThat(body.getNewsType(), is(dbNews.getNewsType()));
     }
 }

@@ -28,7 +28,7 @@ public class NewsService {
         news.setEntityId(badgeAssignment.getId());
 //        news.setEntity(badgeAssignment);
         news.setTags(badgeAssignment.getTags());
-        news.setToEmployees(new HashSet<>(badgeAssignment.getToEmployees()));
+        news.setToUsers(new HashSet<>(badgeAssignment.getToUsers()));
 
         return newsRepository.save(news);
     }

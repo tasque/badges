@@ -26,7 +26,7 @@ public class BadgeAssignmentController {
     @PostMapping
     public NewsDto assignBadge(@RequestBody ImportBadgeAssignment importBadgeAssignment) {
         News news = badgeAssignmentService.assignBadge(importBadgeAssignment);
-        notificationService.notifyEmployees(news);
+        notificationService.notifyUsers(news);
 
         return newsConverter.convert(news);
     }

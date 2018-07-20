@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="Pavel N" id="BADGES-1-1 - made badges">
+        <createTable tableName="badge">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="image_url" type="VARCHAR(255)"/>
+            <column name="enabled" type="BOOLEAN"/>
+            <column name="deleted" type="BOOLEAN"/>
+            <column name="version" type="INT" defaultValue="0"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="Pavel N" id="BADGES-1-2 - insert one badge">
+        <insert tableName="badge">
+            <column name="name" value="Welcome!"/>
+            <column name="enabled" value="true"/>
+            <column name="deleted" value="false"/>
+        </insert>
+    </changeSet>
+
+
+    <changeSet author="Pavel N" id="BADGES-1-3 - made users">
+        <createTable tableName="user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="address" type="VARCHAR(255)"/>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="image_url" type="VARCHAR(255)"/>
+            <column name="enabled" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="BADGES-1-4 - insert few users" author="Pavel N">
+        <insert tableName="user">
+            <column name="name" value="Pavel Novolodskiy"/>
+            <column name="title" value="Developer"/>
+            <column name="enabled" value="true"/>
+        </insert>
+        <insert tableName="user">
+            <column name="name" value="John Doe"/>
+            <column name="enabled" value="true"/>
+        </insert>
+        <insert tableName="user">
+            <column name="name" value="Marty Mcfly"/>
+            <column name="enabled" value="true"/>
+        </insert>
+    </changeSet>
+
+
+</databaseChangeLog>

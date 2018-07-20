@@ -23,8 +23,6 @@ public class BadgeConverter {
     }
 
 
-
-
     public Badge convert(AdminBadge badge) {
         return new Badge()
                 .setId(badge.getId())

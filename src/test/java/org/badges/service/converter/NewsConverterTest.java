@@ -1,19 +1,15 @@
 package org.badges.service.converter;
 
 import com.google.common.collect.Sets;
-import org.badges.api.domain.news.EmployeeNewsDto;
 import org.badges.api.domain.news.NewsDto;
-import org.badges.db.Employee;
+import org.badges.api.domain.news.UserNewsDto;
 import org.badges.db.News;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.hamcrest.core.Is;
+import org.badges.db.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -27,24 +23,24 @@ public class NewsConverterTest {
     private NewsConverter newsConverter;
 
     @Mock
-    private EmployeeConverter employeeConverter;
+    private UserConverter userConverter;
 
     @Test
     public void shouldConvertNews() {
         // given
-        Employee employee1 = new Employee().setId(1L);
-        Employee employee2 = new Employee().setId(2L);
-        Employee employee3 = new Employee().setId(3L);
+        User user1 = new User().setId(1L);
+        User user2 = new User().setId(2L);
+        User user3 = new User().setId(3L);
         News news = new News()
                 .setComment("comment")
-                .setAuthor(employee1)
-                .setToEmployees(Sets.newHashSet(employee2, employee3));
-        EmployeeNewsDto empDto1 = new EmployeeNewsDto().setId(1L);
-        EmployeeNewsDto empDto2 = new EmployeeNewsDto().setId(2L);
-        EmployeeNewsDto empDto3 = new EmployeeNewsDto().setId(3L);
-        when(employeeConverter.convert(employee1)).thenReturn(empDto1);
-        when(employeeConverter.convert(employee2)).thenReturn(empDto2);
-        when(employeeConverter.convert(employee3)).thenReturn(empDto3);
+                .setAuthor(user1)
+                .setToUsers(Sets.newHashSet(user2, user3));
+        UserNewsDto empDto1 = new UserNewsDto().setId(1L);
+        UserNewsDto empDto2 = new UserNewsDto().setId(2L);
+        UserNewsDto empDto3 = new UserNewsDto().setId(3L);
+        when(userConverter.convert(user1)).thenReturn(empDto1);
+        when(userConverter.convert(user2)).thenReturn(empDto2);
+        when(userConverter.convert(user3)).thenReturn(empDto3);
 
         // when
         NewsDto result = newsConverter.convert(news);
@@ -52,6 +48,6 @@ public class NewsConverterTest {
         // then
         assertThat(result.getComment(), is("comment"));
         assertThat(result.getAuthor(), is(empDto1));
-        assertThat(result.getToEmployees(), containsInAnyOrder(empDto2, empDto3));
+        assertThat(result.getToUsers(), containsInAnyOrder(empDto2, empDto3));
     }
 }

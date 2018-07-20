@@ -1,6 +1,6 @@
 package org.badges.security;
 
-import org.badges.db.Employee;
+import org.badges.db.User;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -8,20 +8,20 @@ import java.util.Optional;
 @Component
 public class RequestContext {
 
-    private static final ThreadLocal<Employee> currentEmployee = new ThreadLocal<>();
+    private static final ThreadLocal<User> currentUser = new ThreadLocal<>();
 
 
-    public Employee getCurrentEmployee() {
-        return Optional.ofNullable(currentEmployee.get())
-                .orElse(new Employee().setId(1L));
+    public User getCurrentUser() {
+        return Optional.ofNullable(currentUser.get())
+                .orElse(new User().setId(1L));
     }
 
-    void setCurrentEmplyee(Employee employee) {
-        currentEmployee.set(employee);
+    void setCurrentEmplyee(User user) {
+        currentUser.set(user);
     }
 
     void clear() {
-        currentEmployee.remove();
+        currentUser.remove();
     }
 
 }

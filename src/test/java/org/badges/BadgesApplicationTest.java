@@ -1,6 +1,6 @@
 package org.badges;
 
-import org.badges.db.repository.BadgeRepository;
+import org.badges.db.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +12,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class BadgesApplicationTest {
 
     @Autowired
-    private BadgeRepository badgeRepository;
+    private UserRepository userRepository;
 
 
     @Test
     public void contextLoads() {
+        userRepository.findAll();
     }
 
 }

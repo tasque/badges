@@ -2,7 +2,6 @@ package org.badges.db;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.badges.api.domain.news.NewsDto;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -19,10 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -44,18 +41,18 @@ public class News extends BaseEntity {
     private String comment;
 
     @ManyToOne
-    private Employee author;
+    private User author;
 
     private String tags;
 
     @BatchSize(size = 20)
     @Fetch(FetchMode.SELECT)
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "employee_news",
+    @JoinTable(name = "user_news",
             joinColumns = {@JoinColumn(name = "news_id")},
-            inverseJoinColumns = {@JoinColumn(name = "employee_id")}
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
-    private Set<Employee> toEmployees = Collections.emptySet();
+    private Set<User> toUsers = Collections.emptySet();
 
     private boolean deleted;
 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="Pavel N" id="BADGES-5-1 - user_role">
+        <createTable tableName="user_role">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="user_permissions" type="TEXT"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="Pavel N" id="BADGES-5-2 - user_user_role">
+        <createTable tableName="user_user_role">
+            <column name="user_id" type="BIGINT">
+                <constraints referencedColumnNames="id"
+                             referencedTableName="user"
+                             nullable="false"
+                             foreignKeyName="fk_uur_u"/>
+            </column>
+            <column name="user_user_role_id" type="BIGINT">
+                <constraints referencedTableName="user_role"
+                             referencedColumnNames="id"
+                             nullable="false"
+                             foreignKeyName="fk_uur_ur"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="user_user_role"
+                             columnNames="user_id, user_user_role_id"/>
+    </changeSet>
+
+
+
+</databaseChangeLog>

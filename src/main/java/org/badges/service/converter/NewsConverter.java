@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NewsConverter {
 
-    private final EmployeeConverter employeeConverter;
+    private final UserConverter userConverter;
 
     public NewsDto convert(News news) {
         return new NewsDto()
@@ -20,10 +20,10 @@ public class NewsConverter {
                 .setNewsType(news.getNewsType())
                 .setEntityId(news.getEntityId())
                 .setId(news.getId())
-                .setToEmployees(news.getToEmployees().stream()
-                        .map(employeeConverter::convert)
+                .setToUsers(news.getToUsers().stream()
+                        .map(userConverter::convert)
                         .collect(Collectors.toList()))
-                .setAuthor(employeeConverter.convert(news.getAuthor()))
+                .setAuthor(userConverter.convert(news.getAuthor()))
                 .setTags(Collections.emptyList());
     }
 }

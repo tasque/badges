@@ -16,9 +16,9 @@ public class NewsDto {
 
     private String comment;
 
-    private List<EmployeeNewsDto> toEmployees;
+    private List<UserNewsDto> toUsers;
 
-    private EmployeeNewsDto author;
+    private UserNewsDto author;
 
     private List<String> tags;
 }

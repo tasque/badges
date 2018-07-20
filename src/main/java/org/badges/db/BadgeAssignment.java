@@ -27,14 +27,14 @@ public class BadgeAssignment extends BaseEntity {
     private Badge badge;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "employee_badge_assignment",
+    @JoinTable(name = "user_badge_assignment",
             joinColumns = {@JoinColumn(name = "badge_assignment_id")},
-            inverseJoinColumns = {@JoinColumn(name = "employee_id")}
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
-    private Set<Employee> toEmployees;
+    private Set<User> toUsers;
 
     @ManyToOne
-    private Employee assigner;
+    private User assigner;
 
     private String comment;
 

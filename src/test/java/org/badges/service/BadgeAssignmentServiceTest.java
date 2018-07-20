@@ -3,11 +3,11 @@ package org.badges.service;
 import org.badges.api.domain.ImportBadgeAssignment;
 import org.badges.db.Badge;
 import org.badges.db.BadgeAssignment;
-import org.badges.db.Employee;
 import org.badges.db.News;
+import org.badges.db.User;
 import org.badges.db.repository.BadgeAssignmentRepository;
 import org.badges.db.repository.BadgeRepository;
-import org.badges.db.repository.EmployeeRepository;
+import org.badges.db.repository.UserRepository;
 import org.badges.security.RequestContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +15,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Arrays;
 
@@ -40,7 +40,7 @@ public class BadgeAssignmentServiceTest {
     private BadgeRepository badgeRepository;
 
     @Mock
-    private EmployeeRepository employeeRepository;
+    private UserRepository userRepository;
 
     @Mock
     private RequestContext requestContext;
@@ -54,9 +54,9 @@ public class BadgeAssignmentServiceTest {
         ImportBadgeAssignment assignment = new ImportBadgeAssignment().setComment("comment")
                 .setBadgeId(2L)
                 .setAssignerId(3L)
-                .addEmployees(4L, 5L);
-        when(employeeRepository.findAllById(assignment.getEmployeesIds())).thenReturn(Arrays
-                .asList(new Employee().setId(4L), new Employee().setId(5L)));
+                .addUsers(4L, 5L);
+        when(userRepository.findOne(4L)).thenReturn(new User().setId(4L));
+        when(userRepository.findOne(5L)).thenReturn(new User().setId(5L));
         when(badgeRepository.getOne(2L)).thenReturn(new Badge().setId(2L));
         when(newsService.prepareNews(captor.capture())).thenReturn(new News().setId(6L));
 
@@ -70,6 +70,6 @@ public class BadgeAssignmentServiceTest {
         assertThat(value.getNews().getId(), is(6L));
         assertThat(value.getComment(), is("comment"));
         assertThat(value.getBadge().getId(), is(2L));
-        assertThat(value.getToEmployees().size(), is(2));
+        assertThat(value.getToUsers().size(), is(2));
     }
 }

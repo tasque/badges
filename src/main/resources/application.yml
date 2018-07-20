@@ -5,24 +5,24 @@ spring:
     url: ${BADGES_APP_DATASOURCE_URL}
     username: ${BADGES_APP_DATASOURCE_USERNAME}
     password: ${BADGES_APP_DATASOURCE_PASSWORD}
-  liquibase:
-    change-log: classpath:liquibase/changes.xml
   jpa:
     properties:
       hibernate.temp.use_jdbc_metadata_defaults: false
-    show-sql: false
+    show-sql: true
+liquibase:
+  change-log: classpath:/liquibase/changes.xml
 
-security:
-  ldap:
-    enabled: false
-  oauth2:
-    client:
-      clientId: 1822033224766752
-      clientSecret: ...
-      accessTokenUri: https://graph.facebook.com/oauth/access_token
-      userAuthorizationUri: https://www.facebook.com/dialog/oauth
-      tokenName: oauth_token
-      authenticationScheme: query
-      clientAuthenticationScheme: form
-    resource:
-      userInfoUri: https://graph.facebook.com/me
+#security:
+#  ldap:
+#    enabled: false
+#  oauth2:
+#    client:
+#      clientId: 1822033224766752
+#      clientSecret: ...
+#      accessTokenUri: https://graph.facebook.com/oauth/access_token
+#      userAuthorizationUri: https://www.facebook.com/dialog/oauth
+#      tokenName: oauth_token
+#      authenticationScheme: query
+#      clientAuthenticationScheme: form
+#    resource:
+#      userInfoUri: https://graph.facebook.com/me

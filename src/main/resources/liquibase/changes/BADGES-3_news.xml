@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="Pavel N" id="BADGES-3-1 - news">
+        <createTable tableName="news">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="comment" type="TEXT"/>
+            <column name="tags" type="TEXT"/>
+            <column name="image_url" type="VARCHAR(255)"/>
+            <column name="news_type" type="VARCHAR(255)"/>
+            <column name="entity_id" type="BIGINT"/>
+            <column name="author_id" type="BIGINT">
+                <constraints referencedColumnNames="id"
+                             referencedTableName="user"
+                             foreignKeyName="fk_news_author"
+                             nullable="false"/>
+            </column>
+            <column name="deleted" type="BOOLEAN" defaultValue="false"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="Pavel N" id="BADGES-3-2 - users for news">
+        <createTable tableName="user_news">
+            <column name="news_id" type="BIGINT">
+                <constraints referencedColumnNames="id"
+                             referencedTableName="news"
+                             nullable="false"
+                             foreignKeyName="fk_en_news"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints referencedTableName="user"
+                             referencedColumnNames="id"
+                             nullable="false"
+                             foreignKeyName="fk_en_to_emp"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="user_news"
+                             columnNames="news_id, user_id"/>
+    </changeSet>
+
+    <changeSet id="BADGES-3-3 - news for badge assignment" author="Pavel N">
+        <addColumn tableName="badge_assignment">
+            <column name="news_id" type="BIGINT">
+                <constraints foreignKeyName="fk_news_badge_assignment"
+                             referencedTableName="news"
+                             referencedColumnNames="id"
+                             nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
