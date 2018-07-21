@@ -1,7 +1,9 @@
 package org.badges.db;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -24,8 +26,10 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode(of = "id")
+@ToString(of = {"id", "newsType"})
 @Where(clause = "deleted=false")
-public class News extends BaseEntity {
+public class News {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,12 +63,5 @@ public class News extends BaseEntity {
 //    @Any(metaDef = "BaseEntity", metaColumn = @Column(name = "news_type"), fetch = FetchType.LAZY)
 //    @JoinColumn(name = "entity_id")
 //    private BaseEntity entity;
-
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
 
 }

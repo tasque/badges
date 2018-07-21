@@ -1,7 +1,9 @@
 package org.badges.db;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -17,7 +19,9 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-public class BadgeAssignment extends BaseEntity {
+@EqualsAndHashCode(of = "id")
+@ToString(of = {"id", "comment"})
+public class BadgeAssignment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,8 +47,4 @@ public class BadgeAssignment extends BaseEntity {
     @ManyToOne
     private News news;
 
-    @Override
-    public Long getId() {
-        return id;
-    }
 }

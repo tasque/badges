@@ -21,9 +21,9 @@ public class NewsConverter {
                 .setEntityId(news.getEntityId())
                 .setId(news.getId())
                 .setToUsers(news.getToUsers().stream()
-                        .map(userConverter::convert)
+                        .map(userConverter::convertNews)
                         .collect(Collectors.toList()))
-                .setAuthor(userConverter.convert(news.getAuthor()))
+                .setAuthor(userConverter.convertNews(news.getAuthor()))
                 .setTags(Collections.emptyList());
     }
 }

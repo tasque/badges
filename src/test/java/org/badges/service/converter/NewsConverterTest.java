@@ -38,9 +38,9 @@ public class NewsConverterTest {
         UserNewsDto empDto1 = new UserNewsDto().setId(1L);
         UserNewsDto empDto2 = new UserNewsDto().setId(2L);
         UserNewsDto empDto3 = new UserNewsDto().setId(3L);
-        when(userConverter.convert(user1)).thenReturn(empDto1);
-        when(userConverter.convert(user2)).thenReturn(empDto2);
-        when(userConverter.convert(user3)).thenReturn(empDto3);
+        when(userConverter.convertNews(user1)).thenReturn(empDto1);
+        when(userConverter.convertNews(user2)).thenReturn(empDto2);
+        when(userConverter.convertNews(user3)).thenReturn(empDto3);
 
         // when
         NewsDto result = newsConverter.convert(news);

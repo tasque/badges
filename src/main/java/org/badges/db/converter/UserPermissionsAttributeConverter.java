@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Converter
-public class PermissionConverter implements AttributeConverter<Set<UserPermission>, String> {
+public class UserPermissionsAttributeConverter implements AttributeConverter<Set<UserPermission>, String> {
+
     @Override
     public String convertToDatabaseColumn(Set<UserPermission> attribute) {
         return attribute.stream()

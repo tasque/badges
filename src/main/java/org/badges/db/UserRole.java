@@ -1,7 +1,7 @@
 package org.badges.db;
 
 import lombok.Data;
-import org.badges.db.converter.PermissionConverter;
+import org.badges.db.converter.UserPermissionsAttributeConverter;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -12,18 +12,13 @@ import java.util.Set;
 
 @Data
 @Entity
-public class UserRole extends BaseEntity {
+public class UserRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Convert(converter = PermissionConverter.class)
+    @Convert(converter = UserPermissionsAttributeConverter.class)
     private Set<UserPermission> userPermissions;
-
-    @Override
-    public Long getId() {
-        return id;
-    }
 
 }

@@ -1,7 +1,9 @@
 package org.badges.db;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.Entity;
@@ -15,12 +17,15 @@ import javax.persistence.Table;
 import java.util.Collections;
 import java.util.Set;
 
+
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode(of = "id")
+@ToString(of = {"id", "name"})
+@Table(name = "user", schema = "public")
 @BatchSize(size = 50)
-@Table(name="user", schema = "public")
-public class User extends BaseEntity {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,10 +54,5 @@ public class User extends BaseEntity {
     private Set<UserRole> userRoles = Collections.emptySet();
 
     private boolean enabled;
-
-    @Override
-    public Long getId() {
-        return id;
-    }
 
 }

@@ -24,7 +24,7 @@ public class UserConverterTest {
                 .setImageUrl("img url");
 
         // when
-        UserNewsDto result = userConverter.convert(user);
+        UserNewsDto result = userConverter.convertNews(user);
 
         // then
         assertThat(result.getId(), is(1L));

@@ -40,7 +40,7 @@ public class BadgeAssignmentService {
         badgeAssignment.setToUsers(importBadgeAssignment.getUsersIds().stream()
                 .map(userRepository::findOne)
                 .collect(Collectors.toSet()));
-        badgeAssignmentRepository.save(badgeAssignment);
+        badgeAssignmentRepository.saveAndFlush(badgeAssignment);
 
 
         News news = newsService.prepareNews(badgeAssignment);

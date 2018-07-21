@@ -1,4 +1,4 @@
-package org.badges;
+package org.badges.config;
 
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
