@@ -4,8 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.badges.api.controller.query.UsersQueryParams;
 import org.badges.api.domain.CurrentUser;
 import org.badges.api.domain.UserDto;
+import org.badges.api.domain.admin.AdminBadge;
+import org.badges.db.UserPermission;
 import org.badges.db.repository.UserRepository;
+import org.badges.security.annotation.RequiredPermission;
 import org.badges.service.converter.UserConverter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +28,7 @@ public class UsersController {
 
     private final UserConverter userConverter;
 
-    @GetMapping
+    @GetMapping("/search")
     public List<UserDto> search(UsersQueryParams usersQueryParams) {
         return userRepository.findByNameContainingIgnoreCaseAndEnabledIsTrue(usersQueryParams.getName())
                 .stream()
@@ -37,4 +42,12 @@ public class UsersController {
     public CurrentUser getById(@RequestParam("id") long id) {
         return userConverter.currentUser(userRepository.getOne(id));
     }
+
+    @RequiredPermission(UserPermission.READ_USERS)
+    @GetMapping
+    public Page<UserDto> getUsers(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(userConverter::convertUser);
+    }
+
 }

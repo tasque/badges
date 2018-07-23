@@ -39,6 +39,11 @@ public class BadgesController {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * page=0&size=2&sort=id,asc
+     * @param pageable
+     * @return
+     */
     @RequiredPermission(UserPermission.READ_BADGE)
     @GetMapping
     public Page<AdminBadge> getBadges(Pageable pageable) {
