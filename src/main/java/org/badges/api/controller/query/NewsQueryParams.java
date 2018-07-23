@@ -1,27 +1,61 @@
 package org.badges.api.controller.query;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.domain.PageRequest;
+import lombok.ToString;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 @Getter
 @Setter
-public class NewsQueryParams extends PageRequest {
+@ToString
+@EqualsAndHashCode
+public class NewsQueryParams implements Pageable {
 
-    public NewsQueryParams() {
-        super(0, 20);
+    private int page;
+
+    private int size;
+
+    @Override
+    public int getPageNumber() {
+        return page;
     }
 
-    public NewsQueryParams(int page, int size) {
-        super(page, size);
+    @Override
+    public int getPageSize() {
+        return size;
     }
 
-    public NewsQueryParams(int page, int size, Sort.Direction direction, String... properties) {
-        super(page, size, direction, properties);
+    @Override
+    public int getOffset() {
+        return page * size;
     }
 
-    public NewsQueryParams(int page, int size, Sort sort) {
-        super(page, size, sort);
+    @Override
+    public Sort getSort() {
+        return new Sort(new Sort.Order(Sort.Direction.DESC, "id"));
+    }
+
+    @Override
+    public Pageable next() {
+        return new NewsQueryParams().setPage(page + 1).setSize(size);
+    }
+
+    @Override
+    public Pageable previousOrFirst() {
+        return page == 0
+                ? this
+                : new NewsQueryParams().setPage(page - 1).setSize(0);
+    }
+
+    @Override
+    public Pageable first() {
+        return new NewsQueryParams().setPage(0).setSize(size);
+    }
+
+    @Override
+    public boolean hasPrevious() {
+        return page > 0;
     }
 }

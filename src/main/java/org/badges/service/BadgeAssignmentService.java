@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.badges.api.domain.ImportBadgeAssignment;
 import org.badges.db.BadgeAssignment;
 import org.badges.db.News;
-import org.badges.db.User;
 import org.badges.db.repository.BadgeAssignmentRepository;
 import org.badges.db.repository.BadgeRepository;
 import org.badges.db.repository.UserRepository;

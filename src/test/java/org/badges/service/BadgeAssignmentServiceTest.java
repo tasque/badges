@@ -66,7 +66,7 @@ public class BadgeAssignmentServiceTest {
         // then
         assertThat(news.getId(), is(6L));
         BadgeAssignment value = captor.getValue();
-        verify(badgeAssignmentRepository).save(value);
+        verify(badgeAssignmentRepository).saveAndFlush(value);
         assertThat(value.getNews().getId(), is(6L));
         assertThat(value.getComment(), is("comment"));
         assertThat(value.getBadge().getId(), is(2L));

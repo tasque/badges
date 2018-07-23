@@ -2,15 +2,13 @@ package org.badges.service.converter;
 
 import lombok.RequiredArgsConstructor;
 import org.badges.api.domain.admin.AdminBadge;
+import org.badges.api.domain.catalog.CatalogBadge;
 import org.badges.db.Badge;
-import org.badges.security.RequestContext;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class BadgeConverter {
-
-    private final RequestContext requestContext;
 
     public AdminBadge convert(Badge badge) {
         return new AdminBadge()
@@ -32,5 +30,14 @@ public class BadgeConverter {
                 .setName(badge.getName())
                 .setVersion(badge.getVersion());
     }
+
+    public CatalogBadge catalogBadge(Badge badge) {
+        return new CatalogBadge()
+                .setCategory("All badges")
+                .setName(badge.getName())
+                .setDescription(badge.getDescription())
+                .setImageUrl(badge.getImageUrl());
+    }
+
 
 }

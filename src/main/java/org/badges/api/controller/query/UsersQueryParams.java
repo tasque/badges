@@ -9,8 +9,6 @@ public class UsersQueryParams {
 
     private String name = "";
 
-    private int offset;
-
     private int size = 10;
 
 

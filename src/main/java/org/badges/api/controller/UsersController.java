@@ -27,9 +27,9 @@ public class UsersController {
     public List<UserDto> search(UsersQueryParams usersQueryParams) {
         return userRepository.findByNameContainingIgnoreCaseAndEnabledIsTrue(usersQueryParams.getName())
                 .stream()
-                .skip(usersQueryParams.getOffset())
                 .limit(usersQueryParams.getSize())
                 .map(userConverter::convertUser)
+//                .sorted()
                 .collect(Collectors.toList());
     }
 
