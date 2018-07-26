@@ -11,4 +11,5 @@ public enum UserPermission {
     UPDATE_USER_ROLE,
     DELETE_USER_ROLE,
     READ_USERS,
+    UPDATE_USERS,
 }

@@ -29,7 +29,7 @@ public class BadgeAssignmentService {
     private final RequestContext requestContext;
 
     @Transactional
-    public News assignBadge(@RequestBody ImportBadgeAssignment importBadgeAssignment) {
+    public News assignBadge(ImportBadgeAssignment importBadgeAssignment) {
 
         BadgeAssignment badgeAssignment = new BadgeAssignment();
         badgeAssignment.setComment(importBadgeAssignment.getComment());
