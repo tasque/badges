@@ -14,8 +14,9 @@
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="VARCHAR(255)"/>
-            <column name="image_url" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(2550)"/>
+            <column name="category" type="VARCHAR(255)"/>
+            <column name="image_url" type="VARCHAR(2550)"/>
             <column name="enabled" type="BOOLEAN"/>
             <column name="deleted" type="BOOLEAN"/>
             <column name="version" type="INT" defaultValue="0"/>
@@ -27,7 +28,26 @@
         <insert tableName="badge">
             <column name="name" value="Welcome!"/>
             <column name="enabled" value="true"/>
+            <column name="description" value="ну хоть что-нибудь!"/>
             <column name="deleted" value="false"/>
+            <column name="category" value="Social"/>
+            <column name="image_url" value="http://retrobadge.co.uk/wp-content/uploads/02790-dick-badge1-300x300.jpg"/>
+        </insert>
+        <insert tableName="badge">
+            <column name="name" value="Coder"/>
+            <column name="description" value="Outstanding coding"/>
+            <column name="enabled" value="true"/>
+            <column name="deleted" value="false"/>
+            <column name="category" value="Social"/>
+            <column name="image_url" value="https://thetrilemma.files.wordpress.com/2011/11/octocat.png"/>
+        </insert>
+        <insert tableName="badge">
+            <column name="name" value="Unibadge"/>
+            <column name="description" value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."/>
+            <column name="enabled" value="true"/>
+            <column name="deleted" value="false"/>
+            <column name="category" value="Specialq"/>
+            <column name="image_url" value="http://s2.favim.com/orig/160114/emoticon-png-unicorn-unicornio-Favim.com-3887041.png"/>
         </insert>
     </changeSet>
 
@@ -55,14 +75,23 @@
             <column name="name" value="Pavel Novolodskiy"/>
             <column name="title" value="Developer"/>
             <column name="enabled" value="true"/>
+            <column name="image_url" value="https://avatars1.githubusercontent.com/u/6543369"/>
         </insert>
         <insert tableName="user">
             <column name="name" value="John Doe"/>
             <column name="enabled" value="true"/>
+            <column name="image_url" value="https://memepedia.ru/wp-content/uploads/2017/05/dick-butt-%D0%BE%D1%80%D0%B8%D0%B3%D0%B8%D0%BD%D0%B0%D0%BB-1.jpg"/>
         </insert>
         <insert tableName="user">
             <column name="name" value="Marty Mcfly"/>
             <column name="enabled" value="true"/>
+            <column name="image_url" value="https://yt3.ggpht.com/a-/ACSszfF75vFJVnpZq9JyPbSBE9nYp1xR0kXluZXp3g=s900-mo-c-c0xffffffff-rj-k-no"/>
+        </insert>
+        <insert tableName="user">
+            <column name="name" value="Dmitry Turovtsov"/>
+            <column name="enabled" value="true"/>
+            <column name="title" value="Developer"/>
+            <column name="image_url" value="https://avatars1.githubusercontent.com/u/4538217"/>
         </insert>
     </changeSet>
 
