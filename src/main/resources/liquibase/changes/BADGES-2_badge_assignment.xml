@@ -51,10 +51,11 @@
 
     <changeSet author="Pavel N" id="BADGES-2-3 - create date">
         <addColumn tableName="badge_assignment">
-            <column name="date" type="DATE">
+            <column name="date" type="DATE" defaultValue="now()">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
+        <dropDefaultValue tableName="badge_assignment" columnName="date"/>
     </changeSet>
 
 </databaseChangeLog>

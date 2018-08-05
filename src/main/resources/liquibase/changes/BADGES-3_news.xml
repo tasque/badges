@@ -59,8 +59,9 @@
 
     <changeSet id="BADGES-3-4 - create date" author="Pavel N">
         <addColumn tableName="news">
-            <column name="create_date" type="DATE"/>
+            <column name="create_date" type="DATE" defaultValue="now()"/>
         </addColumn>
+        <dropDefaultValue tableName="news" columnName="create_date"/>
     </changeSet>
 
 </databaseChangeLog>
