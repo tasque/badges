@@ -49,5 +49,12 @@
     </changeSet>
 
 
+    <changeSet author="Pavel N" id="BADGES-2-3 - create date">
+        <addColumn tableName="badge_assignment">
+            <column name="date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

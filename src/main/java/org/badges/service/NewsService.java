@@ -8,6 +8,7 @@ import org.badges.db.repository.NewsRepository;
 import org.badges.security.RequestContext;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.HashSet;
 
 @Component
@@ -15,8 +16,6 @@ import java.util.HashSet;
 public class NewsService {
 
     private final NewsRepository newsRepository;
-
-    private final RequestContext requestContext;
 
     public News prepareNews(BadgeAssignment badgeAssignment) {
         News news = new News();
@@ -29,6 +28,7 @@ public class NewsService {
 //        news.setEntity(badgeAssignment);
         news.setTags(badgeAssignment.getTags());
         news.setToUsers(new HashSet<>(badgeAssignment.getToUsers()));
+        news.setCreateDate(badgeAssignment.getDate());
 
         return newsRepository.save(news);
     }

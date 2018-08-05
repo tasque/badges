@@ -17,6 +17,8 @@ public class NewsQueryParams implements Pageable {
 
     private int size;
 
+    private long userId;
+
     @Override
     public int getPageNumber() {
         return page;

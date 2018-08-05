@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @Component
@@ -39,6 +40,7 @@ public class BadgeAssignmentService {
         badgeAssignment.setToUsers(importBadgeAssignment.getUsersIds().stream()
                 .map(userRepository::findOne)
                 .collect(Collectors.toSet()));
+        badgeAssignment.setDate(new Date());
         badgeAssignmentRepository.saveAndFlush(badgeAssignment);
 
 

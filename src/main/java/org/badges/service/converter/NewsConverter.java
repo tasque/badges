@@ -24,6 +24,7 @@ public class NewsConverter {
                         .map(userConverter::convertNews)
                         .collect(Collectors.toList()))
                 .setAuthor(userConverter.convertNews(news.getAuthor()))
-                .setTags(Collections.emptyList());
+                .setTags(Collections.emptyList())
+                .setDate(news.getCreateDate());
     }
 }

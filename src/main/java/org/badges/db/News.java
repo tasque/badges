@@ -21,6 +21,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Set;
 
 @Getter
@@ -59,6 +60,9 @@ public class News {
     private Set<User> toUsers = Collections.emptySet();
 
     private boolean deleted;
+
+    @Column(name = "create_date")
+    private Date createDate;
 
 //    @Any(metaDef = "BaseEntity", metaColumn = @Column(name = "news_type"), fetch = FetchType.LAZY)
 //    @JoinColumn(name = "entity_id")

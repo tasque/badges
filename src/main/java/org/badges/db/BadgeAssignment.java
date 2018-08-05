@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -43,6 +44,8 @@ public class BadgeAssignment {
     private String comment;
 
     private String tags;
+
+    private Date date;
 
     @ManyToOne
     private News news;
