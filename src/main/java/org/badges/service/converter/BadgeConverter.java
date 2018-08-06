@@ -33,6 +33,7 @@ public class BadgeConverter {
 
     public CatalogBadge catalogBadge(Badge badge) {
         return new CatalogBadge()
+                .setId(badge.getId())
                 .setCategory(badge.getCategory())
                 .setName(badge.getName())
                 .setDescription(badge.getDescription())
