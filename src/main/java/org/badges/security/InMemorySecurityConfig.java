@@ -15,10 +15,14 @@ public class InMemorySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .cors().disable()
+                .csrf().disable()
+                .authorizeRequests()
                 .antMatchers("/**")
                 .authenticated()
-                .and().formLogin();
+                .and().formLogin()
+        ;
     }
 
     @Override
