@@ -47,4 +47,9 @@ public class UsersRoleController {
     public void delete(long id) {
         userRoleRepository.delete(id);
     }
+
+    @GetMapping("/permissions")
+    public UserPermission[] getUserPermissions() {
+        return UserPermission.values();
+    }
 }

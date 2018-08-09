@@ -15,7 +15,7 @@ public class NewsQueryParams implements Pageable {
 
     private int page;
 
-    private int size;
+    private int size = 20;
 
     private long userId;
 

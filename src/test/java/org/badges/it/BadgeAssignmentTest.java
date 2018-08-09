@@ -46,6 +46,7 @@ public class BadgeAssignmentTest {
         ResponseEntity<NewsDto> response = restTemplate.postForEntity("/api/badges/assign", assignment, NewsDto.class);
 
         // then
+        assertThat(response.getStatusCode().is2xxSuccessful(), is(true));
         NewsDto body = response.getBody();
         News dbNews = newsRepository.findOne(body.getId());
         assertThat(body.getComment(), is(dbNews.getComment()));
