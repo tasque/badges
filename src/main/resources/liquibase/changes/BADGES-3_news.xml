@@ -64,4 +64,12 @@
         <dropDefaultValue tableName="news" columnName="create_date"/>
     </changeSet>
 
+    <changeSet id="BADGES-3-5 - denormalized props" author="Pavel N">
+        <addColumn tableName="news">
+            <column name="arg_0" type="VARCHAR(1000)"/>
+            <column name="arg_1" type="VARCHAR(1000)"/>
+            <column name="arg_2" type="VARCHAR(1000)"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

@@ -3,7 +3,9 @@ package org.badges.service.converter;
 import lombok.RequiredArgsConstructor;
 import org.badges.api.domain.admin.AdminBadge;
 import org.badges.api.domain.catalog.CatalogBadge;
+import org.badges.api.domain.news.BadgeNewsDto;
 import org.badges.db.Badge;
+import org.badges.db.News;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -38,6 +40,13 @@ public class BadgeConverter {
                 .setName(badge.getName())
                 .setDescription(badge.getDescription())
                 .setImageUrl(badge.getImageUrl());
+    }
+
+    public BadgeNewsDto badgeNews(News news) {
+        return new BadgeNewsDto()
+                .setId(Long.valueOf(news.getArg0()))
+                .setName(news.getArg1())
+                .setImageUrl(news.getArg2());
     }
 
 

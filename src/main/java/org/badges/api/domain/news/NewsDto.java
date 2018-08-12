@@ -24,4 +24,6 @@ public class NewsDto {
     private List<String> tags;
 
     private Date date;
+
+    private Object reason;
 }

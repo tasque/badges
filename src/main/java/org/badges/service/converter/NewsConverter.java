@@ -14,6 +14,8 @@ public class NewsConverter {
 
     private final UserConverter userConverter;
 
+    private final BadgeConverter badgeConverter;
+
     public NewsDto convert(News news) {
         return new NewsDto()
                 .setComment(news.getComment())
@@ -25,6 +27,7 @@ public class NewsConverter {
                         .collect(Collectors.toList()))
                 .setAuthor(userConverter.convertNews(news.getAuthor()))
                 .setTags(Collections.emptyList())
-                .setDate(news.getCreateDate());
+                .setDate(news.getCreateDate())
+                .setReason(badgeConverter.badgeNews(news));
     }
 }

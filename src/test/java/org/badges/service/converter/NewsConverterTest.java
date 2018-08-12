@@ -1,6 +1,7 @@
 package org.badges.service.converter;
 
 import com.google.common.collect.Sets;
+import org.badges.api.domain.news.BadgeNewsDto;
 import org.badges.api.domain.news.NewsDto;
 import org.badges.api.domain.news.UserNewsDto;
 import org.badges.db.News;
@@ -25,6 +26,9 @@ public class NewsConverterTest {
     @Mock
     private UserConverter userConverter;
 
+    @Mock
+    private BadgeConverter badgeConverter;
+
     @Test
     public void shouldConvertNews() {
         // given
@@ -41,6 +45,8 @@ public class NewsConverterTest {
         when(userConverter.convertNews(user1)).thenReturn(empDto1);
         when(userConverter.convertNews(user2)).thenReturn(empDto2);
         when(userConverter.convertNews(user3)).thenReturn(empDto3);
+        BadgeNewsDto badgeDto = new BadgeNewsDto().setId(1L);
+        when(badgeConverter.badgeNews(news)).thenReturn(badgeDto);
 
         // when
         NewsDto result = newsConverter.convert(news);
@@ -49,5 +55,6 @@ public class NewsConverterTest {
         assertThat(result.getComment(), is("comment"));
         assertThat(result.getAuthor(), is(empDto1));
         assertThat(result.getToUsers(), containsInAnyOrder(empDto2, empDto3));
+        assertThat(result.getReason(), is(badgeDto));
     }
 }

@@ -1,6 +1,7 @@
 package org.badges.service;
 
 import lombok.RequiredArgsConstructor;
+import org.badges.db.Badge;
 import org.badges.db.BadgeAssignment;
 import org.badges.db.News;
 import org.badges.db.NewsType;
@@ -29,6 +30,11 @@ public class NewsService {
         news.setTags(badgeAssignment.getTags());
         news.setToUsers(new HashSet<>(badgeAssignment.getToUsers()));
         news.setCreateDate(badgeAssignment.getDate());
+
+        Badge badge = badgeAssignment.getBadge();
+        news.setArg0(badge.getId().toString());
+        news.setArg1(badge.getName());
+        news.setArg2(badge.getImageUrl());
 
         return newsRepository.save(news);
     }

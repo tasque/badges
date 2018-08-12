@@ -1,5 +1,6 @@
 package org.badges.security;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,7 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @EnableWebSecurity
-//@ConditionalOnProperty("security.ldap.enabled")
+@ConditionalOnProperty("security.enabled")
 public class InMemorySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
