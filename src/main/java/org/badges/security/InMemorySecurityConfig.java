@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @EnableWebSecurity
-@ConditionalOnProperty("security.enabled")
+//@ConditionalOnProperty("security.enabled")
 public class InMemorySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
