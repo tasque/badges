@@ -68,10 +68,14 @@ public class News {
 //    @JoinColumn(name = "entity_id")
 //    private BaseEntity entity;
 
+
+    @Column(name = "arg_0")
     private String arg0;
 
+    @Column(name = "arg_1")
     private String arg1;
 
+    @Column(name = "arg_2")
     private String arg2;
 
 }

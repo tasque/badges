@@ -72,4 +72,16 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="BADGES-3-5 - denormalized props2" author="Pavel N">
+        <sql>
+            UPDATE news as n
+            SET arg_0 = b.id,
+            arg_1 = b.name,
+            arg_2 = b.image_url
+            FROM badge_assignment ba
+            inner join badge b on ba.badge_id = b.id
+            where n.entity_id = ba.id
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
