@@ -41,8 +41,8 @@ public class UsersController {
     }
 
     @GetMapping("/current")
-    public CurrentUser currentUser(@RequestParam("id") long id) {
-        return userConverter.currentUser(userRepository.getOne(id));
+    public CurrentUser currentUser() {
+        return userConverter.currentUser(userRepository.findAll().get(0));
     }
 
     @RequiredPermission(UserPermission.READ_USERS)
