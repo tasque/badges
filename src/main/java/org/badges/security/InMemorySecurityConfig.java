@@ -1,6 +1,5 @@
 package org.badges.security;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,16 +18,19 @@ public class InMemorySecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().disable()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/**")
+                .antMatchers("/api/**")
                 .authenticated()
-                .and().formLogin()
+                .and().formLogin().loginPage("/login-page").loginProcessingUrl("/login").permitAll()
         ;
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("ram").password("ram123").roles("USER")
+
+        auth.inMemoryAuthentication()
+                .withUser("ram").password("ram123").roles("USER")
                 .and().withUser("ravan").password("ravan123").roles("ADMIN")
-                .and().withUser("kans").password("kans123").roles("USER");
+                .and().withUser("kans").password("kans123").roles("USER")
+        ;
     }
 }
