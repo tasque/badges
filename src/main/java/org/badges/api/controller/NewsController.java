@@ -5,13 +5,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.badges.api.controller.query.NewsQueryParams;
 import org.badges.api.domain.news.NewsDto;
+import org.badges.db.News;
 import org.badges.db.QNews;
 import org.badges.db.repository.NewsRepository;
 import org.badges.service.converter.NewsConverter;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.persistence.EntityNotFoundException;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,5 +37,14 @@ public class NewsController {
         }
         return newsRepository.findAll(predicate, pageable)
                 .map(newsConverter::convert);
+    }
+
+    @GetMapping("/{id}")
+    public NewsDto getById(@PathVariable("id") long id) {
+        News one = newsRepository.getOne(id);
+        if (one.isDeleted()) {
+            throw new EntityNotFoundException("Not found news " + id);
+        }
+        return newsConverter.convert(one);
     }
 }

@@ -19,6 +19,8 @@ public class NewsDto {
 
     private List<UserNewsDto> toUsers;
 
+    private int totalToUsers;
+
     private UserNewsDto author;
 
     private List<String> tags;
