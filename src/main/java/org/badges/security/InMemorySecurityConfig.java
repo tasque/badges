@@ -1,21 +1,19 @@
 package org.badges.security;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.provisioning.InMemoryUserDetailsManagerConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Configuration
@@ -38,13 +36,28 @@ public class InMemorySecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder> conf = auth
-                .inMemoryAuthentication();
-        conf.getUserDetailsService().createUser(new UserPrincipal(1L, "ram", "ram123",
+        InMemoryUserDetailsManager userDetailsService = new InMemoryUserDetailsManager() {
+            private final Map<String, UserPrincipal> users = new HashMap();
+
+            @Override
+            public void createUser(UserDetails user) {
+                super.createUser(user);
+                users.put(user.getUsername(), (UserPrincipal) user);
+            }
+
+            @Override
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                return users.computeIfAbsent(username, key -> {
+                    throw new UsernameNotFoundException(username);
+                });
+            }
+        };
+        userDetailsService.createUser(new UserPrincipal(1L, "ram", "ram123",
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))));
-        conf.getUserDetailsService().createUser(new UserPrincipal(4L, "ravan", "ravan123",
+        userDetailsService.createUser(new UserPrincipal(4L, "ravan", "ravan123",
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))));
 
+        auth.userDetailsService(userDetailsService);
     }
 
 }
