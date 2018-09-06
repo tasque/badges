@@ -10,7 +10,6 @@ import org.badges.db.repository.UserRepository;
 import org.badges.security.RequestContext;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -35,7 +34,7 @@ public class BadgeAssignmentService {
         BadgeAssignment badgeAssignment = new BadgeAssignment();
         badgeAssignment.setComment(importBadgeAssignment.getComment());
 
-        badgeAssignment.setAssigner(userRepository.getOne(importBadgeAssignment.getAssignerId()));
+        badgeAssignment.setAssigner(requestContext.getCurrentUser());
         badgeAssignment.setBadge(badgeRepository.getOne(importBadgeAssignment.getBadgeId()));
         badgeAssignment.setToUsers(importBadgeAssignment.getUsersIds().stream()
                 .map(userRepository::findOne)
