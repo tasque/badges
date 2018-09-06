@@ -1,10 +1,21 @@
 package org.badges.security;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configurers.provisioning.InMemoryUserDetailsManagerConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 
 @Configuration
@@ -27,10 +38,13 @@ public class InMemorySecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.inMemoryAuthentication()
-                .withUser("ram").password("ram123").roles("USER")
-                .and().withUser("ravan").password("ravan123").roles("ADMIN")
-                .and().withUser("kans").password("kans123").roles("USER")
-        ;
+        InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder> conf = auth
+                .inMemoryAuthentication();
+        conf.getUserDetailsService().createUser(new UserPrincipal(1L, "ram", "ram123",
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))));
+        conf.getUserDetailsService().createUser(new UserPrincipal(4L, "ravan", "ravan123",
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))));
+
     }
+
 }

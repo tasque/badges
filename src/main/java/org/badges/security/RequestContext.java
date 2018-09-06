@@ -1,27 +1,29 @@
 package org.badges.security;
 
+import lombok.RequiredArgsConstructor;
 import org.badges.db.User;
+import org.badges.db.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
+@RequiredArgsConstructor
 public class RequestContext {
 
-    private static final ThreadLocal<User> currentUser = new ThreadLocal<>();
-
+    private final UserRepository userRepository;
 
     public User getCurrentUser() {
-        return Optional.ofNullable(currentUser.get())
-                .orElse(new User().setId(1L));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long id = ((UserPrincipal) authentication.getPrincipal()).getId();
+        return userRepository.getOne(id);
     }
 
-    void setCurrentEmplyee(User user) {
-        currentUser.set(user);
+    public Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return ((UserPrincipal) authentication.getPrincipal()).getId();
+
     }
 
-    void clear() {
-        currentUser.remove();
-    }
 
 }

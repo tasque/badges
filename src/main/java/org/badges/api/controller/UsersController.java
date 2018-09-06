@@ -8,6 +8,7 @@ import org.badges.api.domain.admin.AdminUser;
 import org.badges.db.User;
 import org.badges.db.UserPermission;
 import org.badges.db.repository.UserRepository;
+import org.badges.security.RequestContext;
 import org.badges.security.annotation.RequiredPermission;
 import org.badges.service.converter.UserConverter;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -30,9 +30,13 @@ public class UsersController {
 
     private final UserConverter userConverter;
 
+    private final RequestContext requestContext;
+
     @GetMapping("/search")
     public List<UserDto> search(UsersQueryParams usersQueryParams) {
-        return userRepository.findByNameContainingIgnoreCaseAndEnabledIsTrue(usersQueryParams.getName())
+        List<User> result = userRepository.findByNameContainingIgnoreCaseAndEnabledIsTrueAndIdIsNot(usersQueryParams.getName(),
+                requestContext.getCurrentUserId());
+        return result
                 .stream()
                 .limit(usersQueryParams.getSize())
                 .map(userConverter::convertUser)
@@ -42,7 +46,7 @@ public class UsersController {
 
     @GetMapping("/current")
     public CurrentUser currentUser() {
-        return userConverter.currentUser(userRepository.findAll().get(0));
+        return userConverter.currentUser(requestContext.getCurrentUser());
     }
 
     @RequiredPermission(UserPermission.READ_USERS)
