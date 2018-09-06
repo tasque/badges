@@ -26,6 +26,10 @@ liquibase:
 #      authenticationScheme: query
 #      clientAuthenticationScheme: form
 #    resource:
+#      userInfoUri: https://graph.facebook.com/me
 server:
   port: 1313
-#      userInfoUri: https://graph.facebook.com/me
+  session:
+    timeout: 1800
+    cookie:
+      max-age: 172800
