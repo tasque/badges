@@ -1,4 +1,3 @@
-
 spring:
   mvc:
     throw-exception-if-no-handler-found: true
@@ -9,7 +8,7 @@ spring:
   jpa:
     properties:
       hibernate.temp.use_jdbc_metadata_defaults: false
-    show-sql: true
+    show-sql: false
 liquibase:
   change-log: classpath:/liquibase/changes.xml
 

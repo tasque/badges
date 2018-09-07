@@ -16,10 +16,6 @@ public class ImportBadgeAssignment {
 
     private String comment;
 
-    private Long assignerId;
-
-    private List<String> tags;
-
     public ImportBadgeAssignment addUsers(Long... ids) {
         if (usersIds == null) {
             usersIds = new HashSet<>(ids.length);
