@@ -48,8 +48,7 @@ public class BadgeAssignmentTest {
         // given
         ImportBadgeAssignment assignment = new ImportBadgeAssignment().setBadgeId(1L)
                 .setComment("new comment")
-                .addUsers(2L, 3L)
-                .setAssignerId(1L);
+                .addUsers(2L, 3L);
 
         // when
         ResponseEntity<NewsDto> response = restTemplate.postForEntity("http://localhost:" + port +

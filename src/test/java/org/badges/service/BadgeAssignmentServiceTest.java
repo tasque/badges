@@ -17,8 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Arrays;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.verify;
@@ -53,8 +51,8 @@ public class BadgeAssignmentServiceTest {
         // given
         ImportBadgeAssignment assignment = new ImportBadgeAssignment().setComment("comment")
                 .setBadgeId(2L)
-                .setAssignerId(3L)
                 .addUsers(4L, 5L);
+        when(requestContext.getCurrentUser()).thenReturn(new User().setId(3L));
         when(userRepository.findOne(4L)).thenReturn(new User().setId(4L));
         when(userRepository.findOne(5L)).thenReturn(new User().setId(5L));
         when(badgeRepository.getOne(2L)).thenReturn(new Badge().setId(2L));
@@ -70,6 +68,7 @@ public class BadgeAssignmentServiceTest {
         assertThat(value.getNews().getId(), is(6L));
         assertThat(value.getComment(), is("comment"));
         assertThat(value.getBadge().getId(), is(2L));
+        assertThat(value.getAssigner().getId(), is(3L));
         assertThat(value.getToUsers().size(), is(2));
     }
 }
