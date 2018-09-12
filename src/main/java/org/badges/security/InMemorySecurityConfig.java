@@ -41,7 +41,6 @@ public class InMemorySecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
 
