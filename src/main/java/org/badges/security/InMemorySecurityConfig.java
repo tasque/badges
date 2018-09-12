@@ -1,16 +1,15 @@
 package org.badges.security;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configurers.provisioning.InMemoryUserDetailsManagerConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import java.util.Collections;
@@ -32,13 +31,8 @@ public class InMemorySecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login*").anonymous()
                 .antMatchers("/api/**").authenticated()
                 .and().formLogin().loginPage("/login-page").loginProcessingUrl("/login").permitAll()
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         ;
-    }
-
-
-    @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Override
@@ -60,9 +54,9 @@ public class InMemorySecurityConfig extends WebSecurityConfigurerAdapter {
                 });
             }
         };
-        userDetailsService.createUser(new UserPrincipal(1L, "ram", getPasswordEncoder().encode("ram123"),
+        userDetailsService.createUser(new UserPrincipal(1L, "ram", "ram123",
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))));
-        userDetailsService.createUser(new UserPrincipal(4L, "ravan", getPasswordEncoder().encode("ravan123"),
+        userDetailsService.createUser(new UserPrincipal(4L, "ravan", "ravan123",
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))));
 
         auth.userDetailsService(userDetailsService);
