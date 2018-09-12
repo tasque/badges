@@ -1,12 +1,15 @@
 package org.badges.security;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configurers.provisioning.InMemoryUserDetailsManagerConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,7 +34,6 @@ public class InMemorySecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login*").anonymous()
                 .antMatchers("/api/**").authenticated()
                 .and().formLogin().loginPage("/login-page").loginProcessingUrl("/login").permitAll()
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         ;
     }
 
@@ -60,6 +62,26 @@ public class InMemorySecurityConfig extends WebSecurityConfigurerAdapter {
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))));
 
         auth.userDetailsService(userDetailsService);
+        auth.authenticationProvider(
+                new AuthenticationProvider() {
+                    @Override
+                    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+                        String username = authentication.getName();
+                        String password = authentication.getCredentials().toString();
+
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                        if (userDetails.getPassword().equals(password)) {
+                            return new UsernamePasswordAuthenticationToken(userDetails, password);
+                        }
+                        throw new BadCredentialsException("Bad creds " + username + " " + password);
+                    }
+
+                    @Override
+                    public boolean supports(Class<?> aClass) {
+                        return auth.equals(UsernamePasswordAuthenticationToken.class);
+                    }
+                }
+        );
     }
 
 }
