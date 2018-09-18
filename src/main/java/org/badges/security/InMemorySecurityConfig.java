@@ -63,33 +63,8 @@ public class InMemorySecurityConfig extends WebSecurityConfigurerAdapter {
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))));
         userDetailsService.createUser(new UserPrincipal(4L, "ravan", "ravan123",
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))));
-
-        auth.userDetailsService(userDetailsService);
-        auth.authenticationProvider(
-                new AuthenticationProvider() {
-                    @Override
-                    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-                        String username = authentication.getName();
-                        String password = authentication.getCredentials().toString();
-
-                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                        if (userDetails.getPassword().equals(password)) {
-                            return new UsernamePasswordAuthenticationToken(userDetails, password);
-                        }
-                        throw new BadCredentialsException("Bad creds " + username + " " + password);
-                    }
-
-                    @Override
-                    public boolean supports(Class<?> aClass) {
-                        return auth.equals(UsernamePasswordAuthenticationToken.class);
-                    }
-                }
-        );
-    }
-
-    @PostConstruct
-    public void postConstruct(ProviderManager providerManager) {
-        providerManager.getProviders().removeIf(provider -> provider instanceof DaoAuthenticationProvider);
+        auth.userDetailsService(userDetailsService)
+                .and().eraseCredentials(false);
     }
 
 }
