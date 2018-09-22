@@ -34,7 +34,8 @@ public class UsersController {
 
     @GetMapping("/search")
     public List<UserDto> search(UsersQueryParams usersQueryParams) {
-        List<User> result = userRepository.findByNameContainingIgnoreCaseAndEnabledIsTrueAndIdIsNot(usersQueryParams.getName(),
+        List<User> result = userRepository.findByNameContainingIgnoreCaseAndEnabledIsTrueAndIdIsNot(
+                usersQueryParams.getName().trim(),
                 requestContext.getCurrentUserId());
         return result
                 .stream()
