@@ -34,7 +34,6 @@ public class UserConverter {
 
     public UserDto convertUser(User user) {
         return new UserDto()
-                .setEmail(user.getEmail())
                 .setId(user.getId())
                 .setImageUrl(user.getImageUrl())
                 .setName(user.getName())
