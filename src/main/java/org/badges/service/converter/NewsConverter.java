@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NewsConverter {
 
-    private static final int maxSize = 10;
+    private static final int maxSize = 8;
 
     private final UserConverter userConverter;
 
