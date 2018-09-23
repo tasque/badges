@@ -28,6 +28,6 @@ public class BadgeAssignmentController {
         News news = badgeAssignmentService.assignBadge(importBadgeAssignment);
         notificationService.notifyUsers(news);
 
-        return newsConverter.convert(news);
+        return newsConverter.shortConvert(news);
     }
 }

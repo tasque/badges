@@ -42,14 +42,14 @@ public class NewsConverterTest {
         UserNewsDto empDto1 = new UserNewsDto().setId(1L);
         UserNewsDto empDto2 = new UserNewsDto().setId(2L);
         UserNewsDto empDto3 = new UserNewsDto().setId(3L);
-        when(userConverter.convertNews(user1)).thenReturn(empDto1);
-        when(userConverter.convertNews(user2)).thenReturn(empDto2);
-        when(userConverter.convertNews(user3)).thenReturn(empDto3);
+        when(userConverter.convertForNews(user1)).thenReturn(empDto1);
+        when(userConverter.convertForNews(user2)).thenReturn(empDto2);
+        when(userConverter.convertForNews(user3)).thenReturn(empDto3);
         BadgeNewsDto badgeDto = new BadgeNewsDto().setId(1L);
         when(badgeConverter.badgeNews(news)).thenReturn(badgeDto);
 
         // when
-        NewsDto result = newsConverter.convert(news);
+        NewsDto result = newsConverter.shortConvert(news);
 
         // then
         assertThat(result.getComment(), is("comment"));

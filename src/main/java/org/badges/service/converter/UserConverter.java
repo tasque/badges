@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Component
 public class UserConverter {
 
-    public UserNewsDto convertNews(User user) {
+    public UserNewsDto convertForNews(User user) {
         return new UserNewsDto()
                 .setId(user.getId())
                 .setImageUrl(user.getImageUrl())

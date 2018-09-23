@@ -24,7 +24,7 @@ public class NewsConverter {
     private final BadgeConverter badgeConverter;
 
 
-    public NewsDto convert(News news) {
+    public NewsDto shortConvert(News news) {
         return new NewsDto()
                 .setComment(getShortComment(news))
                 .setNewsType(news.getNewsType())
@@ -32,9 +32,9 @@ public class NewsConverter {
                 .setId(news.getId())
                 .setTotalToUsers(news.getToUsers().size())
                 .setToUsers(getToUsers(news).stream()
-                        .map(userConverter::convertNews)
+                        .map(userConverter::convertForNews)
                         .collect(Collectors.toList()))
-                .setAuthor(userConverter.convertNews(news.getAuthor()))
+                .setAuthor(userConverter.convertForNews(news.getAuthor()))
                 .setTags(Collections.emptyList())
                 .setDate(news.getCreateDate())
                 .setReason(badgeConverter.badgeNews(news));
@@ -52,5 +52,22 @@ public class NewsConverter {
             return shortList.subList(0, maxSize);
         }
         return toUsers;
+    }
+
+
+    public NewsDto convert(News news) {
+        return new NewsDto()
+                .setComment(news.getComment())
+                .setNewsType(news.getNewsType())
+                .setEntityId(news.getEntityId())
+                .setId(news.getId())
+                .setTotalToUsers(news.getToUsers().size())
+                .setToUsers(news.getToUsers().stream()
+                        .map(userConverter::convertForNews)
+                        .collect(Collectors.toList()))
+                .setAuthor(userConverter.convertForNews(news.getAuthor()))
+                .setTags(Collections.emptyList())
+                .setDate(news.getCreateDate())
+                .setReason(badgeConverter.badgeNews(news));
     }
 }

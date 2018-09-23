@@ -36,15 +36,15 @@ public class NewsController {
                     QNews.news.toUsers.any().id.eq(pageable.getUserId()));
         }
         return newsRepository.findAll(predicate, pageable)
-                .map(newsConverter::convert);
+                .map(newsConverter::shortConvert);
     }
 
     @GetMapping("/{id}")
     public NewsDto getById(@PathVariable("id") long id) {
-        News one = newsRepository.getOne(id);
-        if (one.isDeleted()) {
+        News news = newsRepository.getOne(id);
+        if (news.isDeleted()) {
             throw new EntityNotFoundException("Not found news " + id);
         }
-        return newsConverter.convert(one);
+        return newsConverter.convert(news);
     }
 }
