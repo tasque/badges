@@ -1,5 +1,7 @@
 package org.badges.security;
 
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -57,6 +59,10 @@ public class InMemorySecurityConfig extends WebSecurityConfigurerAdapter {
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))));
         auth.userDetailsService(userDetailsService)
                 .and().eraseCredentials(false);
+    }
+    @Bean
+    public ServletContextInitializer servletContextInitializer() {
+        return servletContext -> servletContext.getSessionCookieConfig().setName("B_JSESSIONID");
     }
 
 }
