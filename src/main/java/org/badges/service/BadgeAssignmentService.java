@@ -2,8 +2,11 @@ package org.badges.service;
 
 import lombok.RequiredArgsConstructor;
 import org.badges.api.domain.ImportBadgeAssignment;
+import org.badges.db.Badge;
 import org.badges.db.BadgeAssignment;
 import org.badges.db.News;
+import org.badges.db.User;
+import org.badges.db.campaign.BadgeCampaignRule;
 import org.badges.db.repository.BadgeAssignmentRepository;
 import org.badges.db.repository.BadgeRepository;
 import org.badges.db.repository.UserRepository;
@@ -11,7 +14,11 @@ import org.badges.security.RequestContext;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -30,12 +37,15 @@ public class BadgeAssignmentService {
 
     @Transactional
     public News assignBadge(ImportBadgeAssignment importBadgeAssignment) {
+        Badge badge = badgeRepository.getOne(importBadgeAssignment.getBadgeId());
+
+        validateCampaignAssignment(badge, importBadgeAssignment);
 
         BadgeAssignment badgeAssignment = new BadgeAssignment();
         badgeAssignment.setComment(importBadgeAssignment.getComment());
 
         badgeAssignment.setAssigner(requestContext.getCurrentUser());
-        badgeAssignment.setBadge(badgeRepository.getOne(importBadgeAssignment.getBadgeId()));
+        badgeAssignment.setBadge(badge);
         badgeAssignment.setToUsers(importBadgeAssignment.getUsersIds().stream()
                 .map(userRepository::findOne)
                 .collect(Collectors.toSet()));
@@ -46,6 +56,59 @@ public class BadgeAssignmentService {
         News news = newsService.prepareNews(badgeAssignment);
         badgeAssignment.setNews(news);
         return news;
+    }
 
+    private void validateCampaignAssignment(Badge badge, ImportBadgeAssignment importBadgeAssignment) {
+        if (badge == null || !badge.isEnabled() || badge.isDeleted()) {
+            throw new BadgeAssignmentValidationException("badge not aviable");
+        }
+
+        BadgeCampaignRule rule = badge.getBadgeCampaignRule();
+        if (rule == null) {
+            return;
+        }
+        if (importBadgeAssignment.getUsersIds().size() > rule.getToUsersMax()) {
+            throw new BadgeAssignmentValidationException("Too many assignees");
+        }
+
+        List<BadgeAssignment> assigned = badgeAssignmentRepository.findAllByAssignerIdAndBadgeIdAndDateAfter(
+                requestContext.getCurrentUserId(), importBadgeAssignment.getBadgeId(), rule.getStartDate());
+
+        if (assigned.size() >= rule.getCountPerCampaign()) {
+            throw new BadgeAssignmentValidationException("Too many assignments");
+        }
+
+        assigned.stream().flatMap(ba -> ba.getToUsers().stream())
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .values().stream().filter(count -> rule.getCountToOneUser() >= count)
+                .findAny()
+                .ifPresent(v -> {
+                    throw new BadgeAssignmentValidationException("Too many assigned");
+                });
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> filterUsers(List<User> users, Long badgeId) {
+        if (badgeId != null) {
+            Badge badge = badgeRepository.findOne(badgeId);
+            BadgeCampaignRule rule = badge.getBadgeCampaignRule();
+            if (badge.isEnabled() && rule != null) {
+                List<BadgeAssignment> assigned = badgeAssignmentRepository.findAllByAssignerIdAndBadgeIdAndDateAfter(
+                        requestContext.getCurrentUserId(), badgeId, rule.getStartDate());
+
+                if (assigned.size() >= rule.getCountPerCampaign()) {
+                    return Collections.emptyList();
+                }
+
+                Map<User, Long> count = assigned.stream().flatMap(ba -> ba.getToUsers().stream())
+                        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+                users.removeIf(user -> count.getOrDefault(user, 0L) >= rule.getCountToOneUser());
+
+            }
+        }
+
+        return users;
     }
 }

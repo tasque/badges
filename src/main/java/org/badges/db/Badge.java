@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.badges.db.campaign.BadgeCampaignRule;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.Version;
 
@@ -11,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -37,6 +39,12 @@ public class Badge {
     private boolean enabled;
 
     private boolean deleted;
+
+    private BadgeType badgeType;
+
+    @ManyToOne
+    private BadgeCampaignRule badgeCampaignRule;
+
 
     @Version
     private int version;
