@@ -5,12 +5,11 @@ import lombok.Setter;
 import org.badges.db.Badge;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import java.util.Date;
 
@@ -24,8 +23,9 @@ public class BadgeCampaignRule {
     @GeneratedValue
     private long id;
 
-    @OneToOne
-    @PrimaryKeyJoinColumn
+    @MapsId
+    @OneToOne(mappedBy = "badgeCampaignRule")
+    @JoinColumn(name = "id")
     private Badge badge;
 
     private int countPerCampaign;

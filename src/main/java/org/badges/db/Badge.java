@@ -47,9 +47,9 @@ public class Badge {
 
     private BadgeType badgeType;
 
-    @MapsId
-    @OneToOne(mappedBy = "badge", cascade = CascadeType.ALL)
-    @JoinColumn(name = "badge_id")
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
     private BadgeCampaignRule badgeCampaignRule;
 
 
