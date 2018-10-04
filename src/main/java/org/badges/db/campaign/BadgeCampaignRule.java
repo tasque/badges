@@ -5,15 +5,24 @@ import lombok.Setter;
 import org.badges.db.Badge;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.Date;
 
 @Getter
 @Setter
 @Entity
+@Table(name = "badge_rule", schema = "public")
 public class BadgeCampaignRule {
 
+    @Id
+    @GeneratedValue
     private long id;
 
+    @OneToOne(mappedBy = "badge", fetch = FetchType.LAZY, optional = false)
     private Badge badge;
 
     private int countPerCampaign;

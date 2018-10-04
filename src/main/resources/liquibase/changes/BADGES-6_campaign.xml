@@ -22,4 +22,30 @@
             <column name="version" type="INT" defaultValue="0"/>
         </createTable>
     </changeSet>
+
+
+    <changeSet author="Pavel N" id="BADGES-6 - 1 - campaign rules">
+        <createTable tableName="badge_rule">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="badge_id" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="fk_br_b"
+                             referencedColumnNames="id"
+                             referencedTableName="badge"/>
+
+            </column>
+            <column name="count_per_campaign" type="INT"/>
+            <column name="count_to_one_user" type="INT"/>
+            <column name="to_users_max" type="INT"/>
+            <column name="hidden_before_end" type="BOOLEAN"/>
+            <column name="hidden_always" type="BOOLEAN"/>
+            <column name="show_results" type="BOOLEAN"/>
+            <column name="period" type="VARCHAR(255)"/>
+            <column name="start_date" type="DATE"/>
+            <column name="end_date" type="DATE"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
