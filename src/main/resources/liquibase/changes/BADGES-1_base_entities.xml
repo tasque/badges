@@ -96,4 +96,12 @@
     </changeSet>
 
 
+    <changeSet id="BADGES-1-5 - add badge_type" author="Pavel N">
+        <addColumn tableName="badge">
+            <column name="badge_type" type="VARCHAR(100)" defaultValue="SIMPLE"/>
+        </addColumn>
+        <dropDefaultValue tableName="badge" columnName="badge_type" />
+    </changeSet>
+
+
 </databaseChangeLog>
