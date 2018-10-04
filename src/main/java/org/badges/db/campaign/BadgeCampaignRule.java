@@ -8,7 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import java.util.Date;
 
@@ -22,7 +24,8 @@ public class BadgeCampaignRule {
     @GeneratedValue
     private long id;
 
-    @OneToOne(mappedBy = "badge", fetch = FetchType.LAZY, optional = false)
+    @OneToOne
+    @PrimaryKeyJoinColumn
     private Badge badge;
 
     private int countPerCampaign;
