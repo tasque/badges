@@ -48,7 +48,8 @@ public class BadgesController {
         Long currentUserId = requestContext.getCurrentUserId();
         List<Badge> badges = badgeService.badgesForCatalogue(currentUserId);
 
-        badges.sort(Comparator.comparing(badge -> badge.getBadgeCampaignRule() != null ? 1 : 0));
+        // campaign goes first
+        badges.sort(Comparator.comparing(badge -> badge.getBadgeCampaignRule() != null ? 0 : 1));
 
         badges.forEach(badge ->
                 catalogue.computeIfAbsent(badge.getCategory(), key -> new ArrayList<>())

@@ -44,7 +44,8 @@ public class BadgeConverter {
                 .setName(badge.getName())
                 .setDescription(badge.getDescription())
                 .setImageUrl(badge.getImageUrl())
-                .setCountLeft(getCountLeft(badge, currentUserId));
+                .setCountLeft(getCountLeft(badge, currentUserId))
+                .setSpecial(badge.getBadgeCampaignRule() != null);
     }
 
     private Integer getCountLeft(Badge badge, Long currentUserId) {
