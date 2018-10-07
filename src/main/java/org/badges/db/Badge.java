@@ -8,6 +8,7 @@ import org.badges.db.campaign.BadgeCampaignRule;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.Version;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -47,8 +48,8 @@ public class Badge {
     private BadgeType badgeType;
 
 
-    @OneToOne
-    @JoinColumn(name = "badge_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "badge_rule_id")
     private BadgeCampaignRule badgeCampaignRule;
 
 

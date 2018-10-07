@@ -31,4 +31,22 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="BADGES-6 - 1 - campaign for badge" author="Pavel N">
+        <addColumn tableName="badge">
+            <column name="badge_rule_id" type="BIGINT">
+                <constraints nullable="true"
+                             referencedTableName="badge_rule"
+                             referencedColumnNames="id"
+                             foreignKeyName="fk_b_br"/>
+            </column>
+        </addColumn>
+        <sql>
+            UPDATE badge AS b
+            SET badge_rule_id = br.id
+            FROM badge_rule AS br
+            WHERE b.id = br.badge_id
+        </sql>
+        <dropColumn tableName="badge_rule" columnName="badge_id"/>
+    </changeSet>
+
 </databaseChangeLog>
