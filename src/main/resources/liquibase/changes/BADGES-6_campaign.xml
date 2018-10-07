@@ -31,6 +31,4 @@
         </createTable>
     </changeSet>
 
-    <!--<changeSet author="Pavel N" id="BADGES-6 - 2 - fix rule">-->
-    <!--</changeSet>-->
 </databaseChangeLog>

@@ -8,7 +8,6 @@ import org.badges.db.campaign.BadgeCampaignRule;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.Version;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,10 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -52,7 +48,7 @@ public class Badge {
 
 
     @OneToOne
-    @PrimaryKeyJoinColumn
+    @JoinColumn(name = "badge_id")
     private BadgeCampaignRule badgeCampaignRule;
 
 
