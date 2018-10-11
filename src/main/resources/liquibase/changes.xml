@@ -10,5 +10,6 @@
     <include file="changes/BADGES-3_news.xml" relativeToChangelogFile="true"/>
     <include file="changes/BADGES-5_user_roles.xml" relativeToChangelogFile="true"/>
     <include file="changes/BADGES-6_campaign.xml" relativeToChangelogFile="true"/>
+    <!--<include file="changes/quartz.xml" relativeToChangelogFile="true"/>-->
 
 </databaseChangeLog>

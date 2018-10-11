@@ -6,11 +6,13 @@ import org.badges.api.domain.news.BadgeNewsDto;
 import org.badges.api.domain.news.NewsDto;
 import org.badges.db.Badge;
 import org.badges.db.News;
+import org.badges.db.User;
 import org.badges.db.repository.BadgeRepository;
 import org.badges.db.repository.NewsRepository;
 import org.badges.security.RequestContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +21,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -47,8 +51,9 @@ public class BadgeAssignmentTest {
     public void shouldAssignBadge() {
         // given
         ImportBadgeAssignment assignment = new ImportBadgeAssignment().setBadgeId(1L)
-                .setComment("new comment")
+                .setComment("new cIomment")
                 .addUsers(2L, 3L);
+        Mockito.when(requestContext.getCurrentUser()).thenReturn(new User().setId(4L));
 
         // when
         ResponseEntity<NewsDto> response = restTemplate.postForEntity("http://localhost:" + port +
@@ -63,7 +68,7 @@ public class BadgeAssignmentTest {
         assertThat(body.getNewsType(), is(dbNews.getNewsType()));
 
         Badge badge = badgeRepository.getByDeletedFalseAndId(1l);
-        BadgeNewsDto reason = (BadgeNewsDto) body.getReason();
-        assertThat(reason.getId(), is(badge.getId()));
+        Map reason = (Map) body.getReason();
+        assertThat(reason.get("id").toString(), is(badge.getId().toString()));
     }
 }
