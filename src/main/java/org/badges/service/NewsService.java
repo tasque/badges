@@ -5,11 +5,11 @@ import org.badges.db.Badge;
 import org.badges.db.BadgeAssignment;
 import org.badges.db.News;
 import org.badges.db.NewsType;
+import org.badges.db.NewsVisibility;
+import org.badges.db.campaign.BadgeCampaignRule;
 import org.badges.db.repository.NewsRepository;
-import org.badges.security.RequestContext;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.HashSet;
 
 @Component
@@ -25,6 +25,8 @@ public class NewsService {
         news.setAuthor(badgeAssignment.getAssigner());
         news.setComment(badgeAssignment.getComment());
         news.setNewsType(NewsType.BADGE_ASSIGNMENT);
+        defineNewsVisibility(badgeAssignment, news);
+
         news.setEntityId(badgeAssignment.getId());
 //        news.setEntity(badgeAssignment);
         news.setTags(badgeAssignment.getTags());
@@ -37,5 +39,16 @@ public class NewsService {
         news.setArg2(badge.getImageUrl());
 
         return newsRepository.save(news);
+    }
+
+    private void defineNewsVisibility(BadgeAssignment badgeAssignment, News news) {
+        news.setNewsVisibility(NewsVisibility.PUBLIC);
+        BadgeCampaignRule badgeCampaignRule = badgeAssignment.getBadge().getBadgeCampaignRule();
+        if (badgeCampaignRule != null)
+        {
+            if (badgeCampaignRule.isHiddenBeforeEnd() || badgeCampaignRule.isHiddenBeforeEnd()) {
+                news.setNewsVisibility(NewsVisibility.PRIVATE);
+            }
+        }
     }
 }

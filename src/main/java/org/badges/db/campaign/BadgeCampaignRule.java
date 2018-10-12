@@ -36,7 +36,9 @@ public class BadgeCampaignRule {
 
     private boolean hiddenAlways;
 
-    private boolean showResults;
+    private boolean generateResults;
+
+    private boolean renewPeriod;
 
     private String period;
 
