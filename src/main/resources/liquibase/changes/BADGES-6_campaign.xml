@@ -49,4 +49,11 @@
         <dropColumn tableName="badge_rule" columnName="badge_id"/>
     </changeSet>
 
+    <changeSet id="BADGES-6 - 2" author="Pavel N">
+        <addColumn tableName="badge_rule">
+            <column name="renew_period" type="BOOLEAN"/>
+        </addColumn>
+        <renameColumn tableName="badge_rule" oldColumnName="show_results" newColumnName="generate_results"/>
+    </changeSet>
+
 </databaseChangeLog>

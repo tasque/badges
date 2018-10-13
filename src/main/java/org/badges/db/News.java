@@ -40,6 +40,8 @@ public class News {
     @Column(name = "news_type")
     private NewsType newsType;
 
+    private NewsVisibility newsVisibility;
+
     @Column(name = "entity_id")
     private Long entityId;
 

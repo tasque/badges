@@ -55,6 +55,8 @@ public class InMemorySecurityConfig extends WebSecurityConfigurerAdapter {
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))));
         userDetailsService.createUser(new UserPrincipal(4L, "ravan", "ravan123",
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))));
+        userDetailsService.createUser(new UserPrincipal(2L, "rock", "rock123",
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))));
         auth.userDetailsService(userDetailsService)
                 .and().eraseCredentials(false);
     }
