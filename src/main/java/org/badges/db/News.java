@@ -12,6 +12,8 @@ import org.hibernate.annotations.Where;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -38,8 +40,10 @@ public class News {
 
 
     @Column(name = "news_type")
+    @Enumerated(EnumType.STRING)
     private NewsType newsType;
 
+    @Enumerated(EnumType.STRING)
     private NewsVisibility newsVisibility;
 
     @Column(name = "entity_id")
