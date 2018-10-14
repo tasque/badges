@@ -7,6 +7,7 @@ import org.badges.db.Badge;
 import org.badges.db.UserPermission;
 import org.badges.db.repository.BadgeRepository;
 import org.badges.security.annotation.RequiredPermission;
+import org.badges.service.BadgeService;
 import org.badges.service.converter.BadgeConverter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,8 @@ public class BadgeAdminController {
 
     private final BadgeConverter badgeConverter;
 
+    private final BadgeService badgeService;
+
     /**
      * page=0&size=2&sort=id,asc
      *
@@ -45,16 +48,17 @@ public class BadgeAdminController {
 
     @RequiredPermission(UserPermission.READ_BADGE)
     @GetMapping("/{id}")
-    public AdminBadge getBadge(@PathVariable("id") long id) {
-        return Optional.ofNullable(badgeRepository.getByDeletedFalseAndId(id))
-                .map(badgeConverter::convert)
-                .orElseThrow(() -> new EntityNotFoundException("Cannot find badge with id " + id));
+    public Badge getBadge(@PathVariable("id") long id) {
+        return badgeRepository.getByDeletedFalseAndId(id);
     }
 
     @RequiredPermission(UserPermission.UPDATE_BADGE)
     @PostMapping
-    public AdminBadge save(AdminBadge badge) {
-        Badge saved = badgeRepository.save(badgeConverter.convert(badge));
+    public AdminBadge save(Badge badge) {
+        Badge saved = badgeRepository.save(badge);
+
+        badgeService.rescheduleBadgeRenewal(saved.getBadgeCampaignRule());
+
         return badgeConverter.convert(saved);
     }
 

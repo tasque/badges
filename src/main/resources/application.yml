@@ -14,6 +14,7 @@ liquibase:
   change-log: classpath:/liquibase/changes.xml
 
 
+quartz.config: classpath:quartz.properties
 #security:
 #  ldap:
 #    enabled: false

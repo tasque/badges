@@ -22,8 +22,7 @@ public class BadgeConverter {
                 .setEnabled(badge.isEnabled())
                 .setName(badge.getName())
                 .setDescription(badge.getDescription())
-                .setImageUrl(badge.getImageUrl())
-                .setVersion(badge.getVersion());
+                .setImageUrl(badge.getImageUrl());
     }
 
 
@@ -33,8 +32,7 @@ public class BadgeConverter {
                 .setEnabled(badge.isEnabled())
                 .setDescription(badge.getDescription())
                 .setImageUrl(badge.getImageUrl())
-                .setName(badge.getName())
-                .setVersion(badge.getVersion());
+                .setName(badge.getName());
     }
 
     public CatalogBadge catalogBadge(Badge badge, Long currentUserId) {

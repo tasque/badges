@@ -6,11 +6,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import javax.sql.DataSource;
 
 @Configuration
 public class QuartzConfiguration {
+
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean(@Value("${quartz.config}") Resource config,
                                                      DataSource dataSource, JobFactory jobFactory) {
