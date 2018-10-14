@@ -92,6 +92,6 @@ public class BadgeService {
                 .startAt(badgeCampaignRule.getEndDate())
                 .usingJobData(jobDataMap)
                 .build();
-        scheduler.scheduleJob(trigger);
+        scheduler.scheduleJob(jobDetail, trigger);
     }
 }
