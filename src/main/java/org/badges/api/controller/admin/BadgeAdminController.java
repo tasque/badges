@@ -50,6 +50,7 @@ public class BadgeAdminController {
     @GetMapping("/{id}")
     public Badge getBadge(@PathVariable("id") long id) {
         Badge badge = badgeRepository.getByDeletedFalseAndId(id);
+        badgeService.rescheduleBadgeRenewal(badge.getBadgeCampaignRule());
         Optional.of(badge)
                 .map(Badge::getBadgeCampaignRule)
                 .ifPresent(badgeCampaignRule -> badgeCampaignRule.setBadge(null));
