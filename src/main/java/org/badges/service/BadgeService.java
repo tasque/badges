@@ -85,7 +85,7 @@ public class BadgeService {
         }
 
         JobDataMap jobDataMap = new JobDataMap();
-        jobDataMap.put("badgeId", badgeId);
+        jobDataMap.put("badgeId", badgeId.toString());
 
         Trigger trigger = TriggerBuilder.newTrigger()
                 .forJob(jobDetail)

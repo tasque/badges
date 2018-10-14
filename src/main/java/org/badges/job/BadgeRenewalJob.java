@@ -21,7 +21,7 @@ public class BadgeRenewalJob implements Job {
 
     @Override
     public void execute(JobExecutionContext context) {
-        long badgeId = context.getTrigger().getJobDataMap().getLong("badgeId");
+        long badgeId = Long.valueOf(context.getTrigger().getJobDataMap().getString("badgeId"));
         Badge badge = badgeService.getSpecialBadge(badgeId);
         BadgeCampaignRule badgeCampaignRule = badge.getBadgeCampaignRule();
 
