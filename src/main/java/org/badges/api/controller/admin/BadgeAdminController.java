@@ -49,7 +49,11 @@ public class BadgeAdminController {
     @RequiredPermission(UserPermission.READ_BADGE)
     @GetMapping("/{id}")
     public Badge getBadge(@PathVariable("id") long id) {
-        return badgeRepository.getByDeletedFalseAndId(id);
+        Badge badge = badgeRepository.getByDeletedFalseAndId(id);
+        Optional.of(badge)
+                .map(Badge::getBadgeCampaignRule)
+                .ifPresent(badgeCampaignRule -> badgeCampaignRule.setBadge(null));
+        return badge;
     }
 
     @RequiredPermission(UserPermission.UPDATE_BADGE)
