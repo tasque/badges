@@ -12,13 +12,16 @@ import org.badges.job.BadgeRenewalJob;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
+import org.quartz.TriggerKey;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -81,7 +84,10 @@ public class BadgeService {
 
         if (scheduler.checkExists(jobDetail.getKey())) {
             log.warn("Found scheduled triggers for " + jobDetail);
-            scheduler.deleteJob(jobDetail.getKey());
+            List<TriggerKey> collect = scheduler.getTriggersOfJob(jobDetail.getKey()).stream()
+                    .map(Trigger::getKey)
+                    .collect(Collectors.toList());
+            scheduler.unscheduleJobs(collect);
         }
 
         JobDataMap jobDataMap = new JobDataMap();
