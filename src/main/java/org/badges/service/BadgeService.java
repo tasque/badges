@@ -77,7 +77,6 @@ public class BadgeService {
         timeService.fitNextEndDate(badgeCampaignRule);
         Long badgeId = badgeCampaignRule.getBadge().getId();
         JobDetail jobDetail = JobBuilder.newJob()
-                .storeDurably()
                 .withIdentity(BadgeRenewalJob.class.getSimpleName() + "-" + badgeId)
                 .ofType(BadgeRenewalJob.class)
                 .build();
@@ -98,6 +97,6 @@ public class BadgeService {
                 .startAt(badgeCampaignRule.getEndDate())
                 .usingJobData(jobDataMap)
                 .build();
-        scheduler.scheduleJob(jobDetail, trigger);
+        scheduler.scheduleJob(trigger);
     }
 }
