@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.badges.db.Badge;
 import org.badges.db.campaign.BadgeCampaignRule;
 import org.badges.service.BadgeService;
+import org.badges.service.TimeService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.springframework.stereotype.Component;
@@ -14,18 +15,19 @@ public class BadgeRenewalJob implements Job {
 
     private final BadgeService badgeService;
 
-//    private final BadgeAssignmentService badgeAssignmentService;
-
-
+    private final TimeService timeService;
 
 
     @Override
     public void execute(JobExecutionContext context) {
-        long badgeId = Long.valueOf(context.getTrigger().getJobDataMap().getString("badgeId"));
+        Long badgeId = Long.valueOf(context.getTrigger().getJobDataMap().getString("badgeId"));
         Badge badge = badgeService.getSpecialBadge(badgeId);
         BadgeCampaignRule badgeCampaignRule = badge.getBadgeCampaignRule();
 
-        badgeService.rescheduleBadgeRenewal(badgeCampaignRule);
+        timeService.fitNextEndDate(badgeCampaignRule);
+        badgeService.save(badge);
+
+
     }
 
 

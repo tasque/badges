@@ -12,7 +12,6 @@ import org.badges.job.BadgeRenewalJob;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
-import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
@@ -33,8 +32,6 @@ public class BadgeService {
     private final BadgeAssignmentRepository badgeAssignmentRepository;
 
     private final Scheduler scheduler;
-
-    private final TimeService timeService;
 
 
     @Transactional(readOnly = true)
@@ -74,7 +71,6 @@ public class BadgeService {
         if (badgeCampaignRule == null) {
             return;
         }
-        timeService.fitNextEndDate(badgeCampaignRule);
         Long badgeId = badgeCampaignRule.getBadge().getId();
         JobDetail jobDetail = JobBuilder.newJob()
                 .withIdentity(BadgeRenewalJob.class.getSimpleName() + "-" + badgeId)
@@ -99,4 +95,9 @@ public class BadgeService {
                 .build();
         scheduler.scheduleJob(trigger);
     }
+
+    public Badge save(Badge badge) {
+        return badgeRepository.save(badge);
+    }
+
 }
