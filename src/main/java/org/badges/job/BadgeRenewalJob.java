@@ -1,6 +1,7 @@
 package org.badges.job;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.badges.db.Badge;
 import org.badges.db.campaign.BadgeCampaignRule;
 import org.badges.service.BadgeService;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class BadgeRenewalJob implements Job {
 
     private final BadgeService badgeService;
@@ -20,7 +22,12 @@ public class BadgeRenewalJob implements Job {
 
     @Override
     public void execute(JobExecutionContext context) {
-        Long badgeId = Long.valueOf(context.getTrigger().getJobDataMap().getString("badgeId"));
+        String badgeIdString = context.getTrigger().getJobDataMap().getString("badgeId");
+
+        log.info("Renew badge with id " + badgeIdString);
+
+        Long badgeId = Long.valueOf(badgeIdString);
+
         Badge badge = badgeService.getSpecialBadge(badgeId);
         BadgeCampaignRule badgeCampaignRule = badge.getBadgeCampaignRule();
 
