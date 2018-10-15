@@ -75,7 +75,7 @@ public class BadgeService {
         Long badgeId = badgeCampaignRule.getBadge().getId();
         JobDetail jobDetail = JobBuilder.newJob()
                 .storeDurably()
-                .withIdentity(this.getClass().getSimpleName() + "-" + badgeId)
+                .withIdentity(BadgeRenewalJob.class.getSimpleName() + "-" + badgeId)
                 .ofType(BadgeRenewalJob.class)
                 .build();
 
