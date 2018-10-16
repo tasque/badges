@@ -19,6 +19,7 @@ import org.quartz.TriggerKey;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,15 +75,16 @@ public class BadgeService {
         Long badgeId = badgeCampaignRule.getBadge().getId();
         JobDetail jobDetail = JobBuilder.newJob()
                 .withIdentity(BadgeRenewalJob.class.getSimpleName() + "-" + badgeId)
+                .storeDurably()
                 .ofType(BadgeRenewalJob.class)
                 .build();
 
         if (scheduler.checkExists(jobDetail.getKey())) {
             log.warn("Found scheduled triggers for " + jobDetail);
-            List<TriggerKey> collect = scheduler.getTriggersOfJob(jobDetail.getKey()).stream()
+            List<TriggerKey> triggers = scheduler.getTriggersOfJob(jobDetail.getKey()).stream()
                     .map(Trigger::getKey)
                     .collect(Collectors.toList());
-            scheduler.unscheduleJobs(collect);
+            scheduler.unscheduleJobs(triggers);
         }
 
         JobDataMap jobDataMap = new JobDataMap();
@@ -93,7 +95,7 @@ public class BadgeService {
                 .startAt(badgeCampaignRule.getEndDate())
                 .usingJobData(jobDataMap)
                 .build();
-        scheduler.scheduleJob(trigger);
+        scheduler.scheduleJob(jobDetail, Collections.singleton(trigger), true);
     }
 
     public Badge save(Badge badge) {

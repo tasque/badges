@@ -8,11 +8,13 @@ import org.badges.service.BadgeService;
 import org.badges.service.TimeService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
+import org.quartz.PersistJobDataAfterExecution;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@PersistJobDataAfterExecution
 public class BadgeRenewalJob implements Job {
 
     private final BadgeService badgeService;
