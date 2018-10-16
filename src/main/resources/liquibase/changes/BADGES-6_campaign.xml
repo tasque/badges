@@ -56,4 +56,9 @@
         <renameColumn tableName="badge_rule" oldColumnName="show_results" newColumnName="generate_results"/>
     </changeSet>
 
+    <changeSet id="BADGES-6 - 3 - change date type" author="Pavel N">
+        <modifyDataType tableName="badge_rule" columnName="start_date" newDataType="Timestamp"/>
+        <modifyDataType tableName="badge_rule" columnName="end_date" newDataType="Timestamp"/>
+    </changeSet>
+
 </databaseChangeLog>

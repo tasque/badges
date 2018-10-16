@@ -57,5 +57,9 @@
         </addColumn>
         <dropDefaultValue tableName="badge_assignment" columnName="date"/>
     </changeSet>
+    
+    <changeSet id="BADGES-2-4 - change date type" author="Pavel N">
+        <modifyDataType tableName="badge_assignment" columnName="date" newDataType="Timestamp"/>
+    </changeSet>
 
 </databaseChangeLog>

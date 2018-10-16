@@ -94,4 +94,8 @@
     </changeSet>
 
 
+    <changeSet id="BADGES-3-7 - change date type" author="Pavel N">
+        <modifyDataType tableName="news" columnName="create_date" newDataType="Timestamp"/>
+    </changeSet>
+
 </databaseChangeLog>
