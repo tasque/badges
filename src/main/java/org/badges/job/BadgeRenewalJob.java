@@ -11,6 +11,8 @@ import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -36,6 +38,9 @@ public class BadgeRenewalJob implements Job {
         timeService.fitNextEndDate(badgeCampaignRule);
         badgeService.save(badge);
 
+        if (badgeCampaignRule.isRenewPeriod() && badgeCampaignRule.getEndDate().after(new Date())) {
+            badgeService.rescheduleBadgeRenewal(badgeCampaignRule);
+        }
 
     }
 
