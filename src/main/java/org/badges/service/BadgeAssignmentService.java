@@ -6,7 +6,7 @@ import org.badges.db.Badge;
 import org.badges.db.BadgeAssignment;
 import org.badges.db.News;
 import org.badges.db.User;
-import org.badges.db.campaign.BadgeCampaignRule;
+import org.badges.db.campaign.Campaign;
 import org.badges.db.repository.BadgeAssignmentRepository;
 import org.badges.db.repository.BadgeRepository;
 import org.badges.db.repository.UserRepository;
@@ -63,24 +63,27 @@ public class BadgeAssignmentService {
             throw new BadgeAssignmentValidationException("badge not aviable");
         }
 
-        BadgeCampaignRule rule = badge.getBadgeCampaignRule();
-        if (rule == null) {
+        Campaign campaign = badge.getCampaign();
+        if (campaign == null) {
             return;
         }
-        if (importBadgeAssignment.getUsersIds().size() > rule.getToUsersMax()) {
+        if (campaign.outOfDate(new Date())) {
+            throw new BadgeAssignmentValidationException("Campaing out of date");
+        }
+        if (importBadgeAssignment.getUsersIds().size() > campaign.getToUsersMax()) {
             throw new BadgeAssignmentValidationException("Too many assignees");
         }
 
         List<BadgeAssignment> assigned = badgeAssignmentRepository.findAllByAssignerIdAndBadgeIdAndDateAfter(
-                requestContext.getCurrentUserId(), importBadgeAssignment.getBadgeId(), rule.getStartDate());
+                requestContext.getCurrentUserId(), importBadgeAssignment.getBadgeId(), campaign.getStartDate());
 
-        if (assigned.size() >= rule.getCountPerCampaign()) {
+        if (assigned.size() >= campaign.getCountPerCampaign()) {
             throw new BadgeAssignmentValidationException("Too many assignments");
         }
 
         assigned.stream().flatMap(ba -> ba.getToUsers().stream())
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                .values().stream().filter(count -> rule.getCountToOneUser() >= count)
+                .values().stream().filter(countPerUser -> campaign.getCountToOneUser() >= countPerUser)
                 .findAny()
                 .ifPresent(v -> {
                     throw new BadgeAssignmentValidationException("Too many assigned");
@@ -92,19 +95,19 @@ public class BadgeAssignmentService {
     public List<User> filterUsers(List<User> users, Long badgeId) {
         if (badgeId != null) {
             Badge badge = badgeRepository.findOne(badgeId);
-            BadgeCampaignRule rule = badge.getBadgeCampaignRule();
-            if (badge.isEnabled() && rule != null) {
+            Campaign campaign = badge.getCampaign();
+            if (badge.isEnabled() && campaign != null) {
                 List<BadgeAssignment> assigned = badgeAssignmentRepository.findAllByAssignerIdAndBadgeIdAndDateAfter(
-                        requestContext.getCurrentUserId(), badgeId, rule.getStartDate());
+                        requestContext.getCurrentUserId(), badgeId, campaign.getStartDate());
 
-                if (assigned.size() >= rule.getCountPerCampaign()) {
+                if (assigned.size() >= campaign.getCountPerCampaign()) {
                     return Collections.emptyList();
                 }
 
                 Map<User, Long> count = assigned.stream().flatMap(ba -> ba.getToUsers().stream())
                         .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-                users.removeIf(user -> count.getOrDefault(user, 0L) >= rule.getCountToOneUser());
+                users.removeIf(user -> count.getOrDefault(user, 0L) >= campaign.getCountToOneUser());
 
             }
         }

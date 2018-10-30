@@ -2,15 +2,13 @@ package org.badges.api.controller;
 
 import org.badges.api.domain.catalog.CatalogBadge;
 import org.badges.db.Badge;
-import org.badges.db.campaign.BadgeCampaignRule;
+import org.badges.db.campaign.Campaign;
 import org.badges.security.RequestContext;
 import org.badges.service.BadgeAssignmentService;
 import org.badges.service.BadgeService;
 import org.badges.service.converter.BadgeConverter;
 import org.badges.service.converter.NewsConverter;
 import org.badges.service.event.NotificationService;
-import org.hamcrest.core.Is;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -56,7 +54,7 @@ public class BadgesControllerTest {
         when(requestContext.getCurrentUserId()).thenReturn(1L);
         Badge badge1 = new Badge().setId(2L).setCategory("cat3");
         Badge badge2 = new Badge().setId(3L).setCategory("cat2");
-        Badge badge3 = new Badge().setId(4L).setCategory("cat1").setBadgeCampaignRule(new BadgeCampaignRule());
+        Badge badge3 = new Badge().setId(4L).setCategory("cat1").setCampaign(new Campaign());
         Badge badge4 = new Badge().setId(5L).setCategory("cat2");
         when(badgeService.badgesForCatalogue(1L)).thenReturn(Arrays.asList(badge1, badge2, badge3, badge4));
         when(badgeConverter.catalogBadge(badge1, 1L)).thenReturn(new CatalogBadge().setId(2));

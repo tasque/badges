@@ -7,24 +7,23 @@ import org.badges.db.Badge;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "badge_rule", schema = "public")
-public class BadgeCampaignRule {
+@Table(name = "campaign", schema = "public")
+public class Campaign {
 
     @Id
     @GeneratedValue
     private long id;
 
-    @OneToOne(mappedBy = "badgeCampaignRule")
-    private Badge badge;
+    @OneToMany(mappedBy = "campaign")
+    private Set<Badge> badge;
 
     private int countPerCampaign;
 
@@ -45,4 +44,8 @@ public class BadgeCampaignRule {
     private Date startDate;
 
     private Date endDate;
+
+    public boolean outOfDate(Date date) {
+        return startDate.before(date) || endDate.after(date);
+    }
 }

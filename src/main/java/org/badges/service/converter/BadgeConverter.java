@@ -6,7 +6,7 @@ import org.badges.api.domain.catalog.CatalogBadge;
 import org.badges.api.domain.news.BadgeNewsDto;
 import org.badges.db.Badge;
 import org.badges.db.News;
-import org.badges.db.campaign.BadgeCampaignRule;
+import org.badges.db.campaign.Campaign;
 import org.badges.db.repository.BadgeAssignmentRepository;
 import org.springframework.stereotype.Component;
 
@@ -43,17 +43,17 @@ public class BadgeConverter {
                 .setDescription(badge.getDescription())
                 .setImageUrl(badge.getImageUrl())
                 .setCountLeft(getCountLeft(badge, currentUserId))
-                .setSpecial(badge.getBadgeCampaignRule() != null);
+                .setSpecial(badge.getCampaign() != null);
     }
 
     private Integer getCountLeft(Badge badge, Long currentUserId) {
-        BadgeCampaignRule rule = badge.getBadgeCampaignRule();
-        if (rule == null) {
+        Campaign campaign = badge.getCampaign();
+        if (campaign == null) {
             return null;
         }
-        int elapsed = badgeAssignmentRepository.findAllByAssignerIdAndBadgeIdAndDateAfter(currentUserId, badge.getId(), rule.getStartDate())
+        int elapsed = badgeAssignmentRepository.findAllByAssignerIdAndBadgeIdAndDateAfter(currentUserId, badge.getId(), campaign.getStartDate())
                 .size();
-        return rule.getCountPerCampaign() - elapsed;
+        return campaign.getCountPerCampaign() - elapsed;
     }
 
     public BadgeNewsDto badgeNews(News news) {

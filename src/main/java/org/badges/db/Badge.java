@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.badges.db.campaign.BadgeCampaignRule;
+import org.badges.db.campaign.Campaign;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.Version;
 
@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
@@ -48,9 +49,8 @@ public class Badge {
     private BadgeType badgeType;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "badge_rule_id")
-    private BadgeCampaignRule badgeCampaignRule;
+    @ManyToOne
+    private Campaign campaign;
 
 
     @Version

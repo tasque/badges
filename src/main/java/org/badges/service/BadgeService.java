@@ -5,10 +5,10 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.badges.db.Badge;
 import org.badges.db.BadgeAssignment;
-import org.badges.db.campaign.BadgeCampaignRule;
+import org.badges.db.campaign.Campaign;
 import org.badges.db.repository.BadgeAssignmentRepository;
 import org.badges.db.repository.BadgeRepository;
-import org.badges.job.BadgeRenewalJob;
+import org.badges.job.CampaignRenewalJob;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,28 +39,34 @@ public class BadgeService {
     @Transactional(readOnly = true)
     public List<Badge> badgesForCatalogue(Long userId) {
         List<Badge> availableBadges = badgeRepository.findAllByEnabledTrueAndDeletedFalse();
+        Date now = new Date();
 
-        availableBadges.removeIf(b -> meetsCampaignLimitation(b, userId));
+        availableBadges.removeIf(b -> meetsCampaignLimitation(b, userId, now));
 
         return availableBadges;
     }
 
-    private boolean meetsCampaignLimitation(Badge badge, Long userId) {
-        BadgeCampaignRule rule = badge.getBadgeCampaignRule();
-        if (rule == null) {
+    private boolean meetsCampaignLimitation(Badge badge, Long userId, Date now) {
+        Campaign campaign = badge.getCampaign();
+        if (campaign == null) {
             return false;
         }
-        List<BadgeAssignment> assignments = badgeAssignmentRepository.findAllByAssignerIdAndBadgeIdAndDateAfter(userId, badge.getId(), rule.getStartDate());
+        if (campaign.outOfDate(now)) {
+            log.debug("Campaign {} out of date", campaign);
+            return true;
+        }
+        List<BadgeAssignment> assignments = badgeAssignmentRepository.findAllByAssignerIdAndBadgeIdAndDateAfter(userId, badge.getId(), campaign.getStartDate());
 
-        return assignments.size() >= rule.getCountPerCampaign();
+        log.debug("Already assigned {} of {} badges", assignments.size(), campaign.getCountPerCampaign());
+        return assignments.size() >= campaign.getCountPerCampaign();
     }
 
     @Transactional(readOnly = true)
     public Badge getSpecialBadge(long id) {
         Badge badge = badgeRepository.findOne(id);
 
-        BadgeCampaignRule badgeCampaignRule = badge.getBadgeCampaignRule();
-        if (badge.isDeleted() || !badge.isEnabled() || badgeCampaignRule == null) {
+        Campaign campaign = badge.getCampaign();
+        if (badge.isDeleted() || !badge.isEnabled() || campaign == null) {
             throw new RuntimeException("there is no special badge " + id);
         }
 
@@ -68,15 +75,15 @@ public class BadgeService {
 
 
     @SneakyThrows
-    public void rescheduleBadgeRenewal(BadgeCampaignRule badgeCampaignRule) {
-        if (badgeCampaignRule == null) {
+    public void rescheduleBadgeRenewal(Campaign campaign) {
+        if (campaign == null) {
             return;
         }
-        Long badgeId = badgeCampaignRule.getBadge().getId();
+        long campaignId = campaign.getId();
         JobDetail jobDetail = JobBuilder.newJob()
-                .withIdentity(BadgeRenewalJob.class.getSimpleName() + "-" + badgeId)
+                .withIdentity(CampaignRenewalJob.class.getSimpleName() + "-" + campaignId)
                 .storeDurably()
-                .ofType(BadgeRenewalJob.class)
+                .ofType(CampaignRenewalJob.class)
                 .build();
 
         if (scheduler.checkExists(jobDetail.getKey())) {
@@ -88,11 +95,11 @@ public class BadgeService {
         }
 
         JobDataMap jobDataMap = new JobDataMap();
-        jobDataMap.put("badgeId", badgeId.toString());
+        jobDataMap.put("campaignId", campaignId + "");
 
         Trigger trigger = TriggerBuilder.newTrigger()
                 .forJob(jobDetail)
-                .startAt(badgeCampaignRule.getEndDate())
+                .startAt(campaign.getEndDate())
                 .usingJobData(jobDataMap)
                 .build();
         scheduler.scheduleJob(jobDetail, Collections.singleton(trigger), true);

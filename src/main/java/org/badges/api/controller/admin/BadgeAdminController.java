@@ -50,9 +50,9 @@ public class BadgeAdminController {
     @GetMapping("/{id}")
     public Badge getBadge(@PathVariable("id") long id) {
         Badge badge = badgeRepository.getByDeletedFalseAndId(id);
-        badgeService.rescheduleBadgeRenewal(badge.getBadgeCampaignRule());
+        badgeService.rescheduleBadgeRenewal(badge.getCampaign());
         Optional.of(badge)
-                .map(Badge::getBadgeCampaignRule)
+                .map(Badge::getCampaign)
                 .ifPresent(badgeCampaignRule -> badgeCampaignRule.setBadge(null));
         return badge;
     }
@@ -62,7 +62,7 @@ public class BadgeAdminController {
     public AdminBadge save(Badge badge) {
         Badge saved = badgeRepository.save(badge);
 
-        badgeService.rescheduleBadgeRenewal(saved.getBadgeCampaignRule());
+        badgeService.rescheduleBadgeRenewal(saved.getCampaign());
 
         return badgeConverter.convert(saved);
     }

@@ -1,6 +1,6 @@
 package org.badges.service;
 
-import org.badges.db.campaign.BadgeCampaignRule;
+import org.badges.db.campaign.Campaign;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
@@ -19,19 +19,19 @@ public class TimeService {
             .appendHours().appendSuffix("h").toFormatter();
 
 
-    public Period fitNextEndDate(BadgeCampaignRule badgeCampaignRule) {
-        Period period = periodFormatter.parsePeriod(badgeCampaignRule.getPeriod());
+    public Period fitNextEndDate(Campaign campaign) {
+        Period period = periodFormatter.parsePeriod(campaign.getPeriod());
 
-        DateTime startDate = new DateTime(badgeCampaignRule.getStartDate());
-        DateTime endDate = new DateTime(badgeCampaignRule.getEndDate());
+        DateTime startDate = new DateTime(campaign.getStartDate());
+        DateTime endDate = new DateTime(campaign.getEndDate());
         while (endDate.isBeforeNow())
         {
             startDate = startDate.plus(period);
             endDate = endDate.plus(period);
         }
 
-        badgeCampaignRule.setStartDate(startDate.toDate());
-        badgeCampaignRule.setEndDate(endDate.toDate());
+        campaign.setStartDate(startDate.toDate());
+        campaign.setEndDate(endDate.toDate());
 
         return period;
     }

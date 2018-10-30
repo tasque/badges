@@ -6,7 +6,7 @@ import org.badges.db.BadgeAssignment;
 import org.badges.db.News;
 import org.badges.db.NewsType;
 import org.badges.db.NewsVisibility;
-import org.badges.db.campaign.BadgeCampaignRule;
+import org.badges.db.campaign.Campaign;
 import org.badges.db.repository.NewsRepository;
 import org.springframework.stereotype.Component;
 
@@ -43,10 +43,10 @@ public class NewsService {
 
     private void defineNewsVisibility(BadgeAssignment badgeAssignment, News news) {
         news.setNewsVisibility(NewsVisibility.PUBLIC);
-        BadgeCampaignRule badgeCampaignRule = badgeAssignment.getBadge().getBadgeCampaignRule();
-        if (badgeCampaignRule != null)
+        Campaign campaign = badgeAssignment.getBadge().getCampaign();
+        if (campaign != null)
         {
-            if (badgeCampaignRule.isHiddenBeforeEnd() || badgeCampaignRule.isHiddenBeforeEnd()) {
+            if (campaign.isHiddenBeforeEnd() || campaign.isHiddenBeforeEnd()) {
                 news.setNewsVisibility(NewsVisibility.PRIVATE);
             }
         }
