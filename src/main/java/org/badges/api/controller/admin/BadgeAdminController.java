@@ -53,7 +53,7 @@ public class BadgeAdminController {
         badgeService.rescheduleBadgeRenewal(badge.getCampaign());
         Optional.of(badge)
                 .map(Badge::getCampaign)
-                .ifPresent(badgeCampaignRule -> badgeCampaignRule.setBadge(null));
+                .ifPresent(badgeCampaignRule -> badgeCampaignRule.setBadges(null));
         return badge;
     }
 

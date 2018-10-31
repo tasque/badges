@@ -23,7 +23,7 @@ public class Campaign {
     private long id;
 
     @OneToMany(mappedBy = "campaign")
-    private Set<Badge> badge;
+    private Set<Badge> badges;
 
     private int countPerCampaign;
 
@@ -40,6 +40,10 @@ public class Campaign {
     private boolean renewPeriod;
 
     private String period;
+
+    private String description;
+
+    private String imageUrl;
 
     private Date startDate;
 

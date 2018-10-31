@@ -22,6 +22,8 @@
             <column name="start_date" type="Timestamp"/>
             <column name="end_date" type="Timestamp"/>
             <column name="renew_period" type="BOOLEAN"/>
+            <column name="description" type="TEXT"/>
+            <column name="image_url" type="VARCHAR(2550)"/>
         </createTable>
     </changeSet>
 
@@ -32,6 +34,18 @@
                              referencedTableName="campaign"
                              referencedColumnNames="id"
                              foreignKeyName="fk_badge_camp"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+
+    <changeSet id="BADGES-6 - 3 - campaign for badge assignment" author="Pavel N">
+        <addColumn tableName="badge_assignment">
+            <column name="campaign_id" type="BIGINT">
+                <constraints nullable="true"
+                             referencedTableName="campaign"
+                             referencedColumnNames="id"
+                             foreignKeyName="fk_badge_assignment_camp"/>
             </column>
         </addColumn>
     </changeSet>

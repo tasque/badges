@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.badges.db.campaign.Campaign;
 import org.badges.db.repository.CampaignRepository;
 import org.badges.service.BadgeService;
+import org.badges.service.NewsService;
 import org.badges.service.TimeService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -23,6 +24,8 @@ public class CampaignRenewalJob implements Job {
 
     private final TimeService timeService;
 
+    private final NewsService newsService;
+
 
     @Override
     public void execute(JobExecutionContext context) {
@@ -31,6 +34,8 @@ public class CampaignRenewalJob implements Job {
         log.info("Renew campaign with id " + campaignIdStr);
 
         Campaign campaign = campaignRepository.findOne(Long.valueOf(campaignIdStr));
+
+        newsService.prepareNews(campaign);
 
         timeService.fitNextEndDate(campaign);
         campaignRepository.save(campaign);

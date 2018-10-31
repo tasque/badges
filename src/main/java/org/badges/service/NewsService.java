@@ -2,6 +2,7 @@ package org.badges.service;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.badges.api.controller.query.NewsQueryParams;
 import org.badges.db.Badge;
 import org.badges.db.BadgeAssignment;
@@ -9,21 +10,29 @@ import org.badges.db.News;
 import org.badges.db.NewsType;
 import org.badges.db.NewsVisibility;
 import org.badges.db.campaign.Campaign;
+import org.badges.db.repository.BadgeAssignmentRepository;
 import org.badges.db.repository.NewsRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.badges.db.NewsVisibility.PUBLIC;
 import static org.badges.db.QNews.news;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class NewsService {
 
     private final NewsRepository newsRepository;
+
+    private final BadgeAssignmentRepository badgeAssignmentRepository;
 
     public Page<News> findNews(NewsQueryParams pageable) {
         BooleanExpression isPublic = news.newsVisibility.in(PUBLIC);
@@ -58,7 +67,6 @@ public class NewsService {
         defineNewsVisibility(badgeAssignment, news);
 
         news.setEntityId(badgeAssignment.getId());
-//        news.setEntity(badgeAssignment);
         news.setTags(badgeAssignment.getTags());
         news.setToUsers(new HashSet<>(badgeAssignment.getToUsers()));
         news.setCreateDate(badgeAssignment.getDate());
@@ -69,6 +77,42 @@ public class NewsService {
         news.setArg2(badge.getImageUrl());
 
         return newsRepository.save(news);
+    }
+
+    @Transactional
+    public News prepareNews(Campaign campaign) {
+        if (campaign.isGenerateResults()) {
+            List<BadgeAssignment> assignments = campaign.getBadges().stream()
+                    .flatMap(b -> badgeAssignmentRepository.findAllByBadgeIdAndDateAfterAndDateBefore(
+                            b.getId(),
+                            campaign.getStartDate(),
+                            campaign.getEndDate()).stream())
+                    .collect(Collectors.toList());
+
+            if (!campaign.isHiddenAlways()) {
+                assignments.forEach(ba -> newsRepository.save(ba.getNews().setNewsVisibility(PUBLIC)));
+            }
+
+
+            News news = new News();
+            news.setComment(campaign.getDescription());
+            news.setNewsType(NewsType.CAMPAIGN_RESULTS);
+            news.setNewsVisibility(PUBLIC);
+
+            news.setEntityId(campaign.getId());
+            news.setToUsers(assignments.stream().flatMap(ba -> ba.getToUsers().stream()).collect(Collectors.toSet()));
+            news.setCreateDate(new Date());
+
+            news.setArg0(campaign.getId() + "");
+            news.setArg1(campaign.getDescription());
+            news.setArg2(campaign.getImageUrl());
+
+            return newsRepository.save(news);
+        } else {
+            log.info("There is no need to generate results for {}", campaign);
+            return null;
+        }
+
     }
 
     private void defineNewsVisibility(BadgeAssignment badgeAssignment, News news) {

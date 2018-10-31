@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,8 @@ public class BadgeAssignmentService {
 
         badgeAssignment.setAssigner(requestContext.getCurrentUser());
         badgeAssignment.setBadge(badge);
+        Optional.ofNullable(badge.getCampaign()).ifPresent(badgeAssignment::setCampaign);
+
         badgeAssignment.setToUsers(importBadgeAssignment.getUsersIds().stream()
                 .map(userRepository::findOne)
                 .collect(Collectors.toSet()));
@@ -60,7 +63,7 @@ public class BadgeAssignmentService {
 
     private void validateCampaignAssignment(Badge badge, ImportBadgeAssignment importBadgeAssignment) {
         if (badge == null || !badge.isEnabled() || badge.isDeleted()) {
-            throw new BadgeAssignmentValidationException("badge not aviable");
+            throw new BadgeAssignmentValidationException("badge not available");
         }
 
         Campaign campaign = badge.getCampaign();
@@ -68,7 +71,7 @@ public class BadgeAssignmentService {
             return;
         }
         if (campaign.outOfDate(new Date())) {
-            throw new BadgeAssignmentValidationException("Campaing out of date");
+            throw new BadgeAssignmentValidationException("Campaign is out of date");
         }
         if (importBadgeAssignment.getUsersIds().size() > campaign.getToUsersMax()) {
             throw new BadgeAssignmentValidationException("Too many assignees");

@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.badges.db.campaign.Campaign;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -40,6 +41,9 @@ public class BadgeAssignment {
 
     @ManyToOne
     private User assigner;
+
+    @ManyToOne
+    private Campaign campaign;
 
     private String comment;
 
