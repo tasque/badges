@@ -81,38 +81,32 @@ public class NewsService {
 
     @Transactional
     public News prepareNews(Campaign campaign) {
-        if (campaign.isGenerateResults()) {
-            List<BadgeAssignment> assignments = campaign.getBadges().stream()
-                    .flatMap(b -> badgeAssignmentRepository.findAllByBadgeIdAndDateAfterAndDateBefore(
-                            b.getId(),
-                            campaign.getStartDate(),
-                            campaign.getEndDate()).stream())
-                    .collect(Collectors.toList());
+        List<BadgeAssignment> assignments = campaign.getBadges().stream()
+                .flatMap(b -> badgeAssignmentRepository.findAllByBadgeIdAndDateAfterAndDateBefore(
+                        b.getId(),
+                        campaign.getStartDate(),
+                        campaign.getEndDate()).stream())
+                .collect(Collectors.toList());
 
-            if (!campaign.isHiddenAlways()) {
-                assignments.forEach(ba -> newsRepository.save(ba.getNews().setNewsVisibility(PUBLIC)));
-            }
-
-
-            News news = new News();
-            news.setComment(campaign.getDescription());
-            news.setNewsType(NewsType.CAMPAIGN_RESULTS);
-            news.setNewsVisibility(PUBLIC);
-
-            news.setEntityId(campaign.getId());
-            news.setToUsers(assignments.stream().flatMap(ba -> ba.getToUsers().stream()).collect(Collectors.toSet()));
-            news.setCreateDate(new Date());
-
-            news.setArg0(campaign.getId() + "");
-            news.setArg1(campaign.getDescription());
-            news.setArg2(campaign.getImageUrl());
-
-            return newsRepository.save(news);
-        } else {
-            log.info("There is no need to generate results for {}", campaign);
-            return null;
+        if (!campaign.isHiddenAlways()) {
+            assignments.forEach(ba -> newsRepository.save(ba.getNews().setNewsVisibility(PUBLIC)));
         }
 
+
+        News news = new News();
+        news.setComment(campaign.getDescription());
+        news.setNewsType(NewsType.CAMPAIGN_RESULTS);
+        news.setNewsVisibility(PUBLIC);
+
+        news.setEntityId(campaign.getId());
+        news.setToUsers(assignments.stream().flatMap(ba -> ba.getToUsers().stream()).collect(Collectors.toSet()));
+        news.setCreateDate(new Date());
+
+        news.setArg0(campaign.getId() + "");
+        news.setArg1(campaign.getDescription());
+        news.setArg2(campaign.getImageUrl());
+
+        return newsRepository.save(news);
     }
 
     private void defineNewsVisibility(BadgeAssignment badgeAssignment, News news) {

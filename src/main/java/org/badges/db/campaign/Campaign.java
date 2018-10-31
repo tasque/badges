@@ -20,7 +20,7 @@ public class Campaign {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @OneToMany(mappedBy = "campaign")
     private Set<Badge> badges;
