@@ -51,7 +51,7 @@ public class InMemorySecurityConfig extends WebSecurityConfigurerAdapter {
                 });
             }
         };
-        userDetailsService.createUser(new UserPrincipal(1L, "ram", "ram123",
+        userDetailsService.createUser(new UserPrincipal(1L, "rav", "rav123",
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))));
         userDetailsService.createUser(new UserPrincipal(4L, "ravan", "ravan123",
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))));
