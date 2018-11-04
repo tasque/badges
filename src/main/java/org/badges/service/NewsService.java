@@ -14,7 +14,6 @@ import org.badges.db.repository.BadgeAssignmentRepository;
 import org.badges.db.repository.NewsRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Date;
@@ -79,7 +78,6 @@ public class NewsService {
         return newsRepository.save(news);
     }
 
-    @Transactional
     public News prepareNews(Campaign campaign) {
         List<BadgeAssignment> assignments = campaign.getBadges().stream()
                 .flatMap(b -> badgeAssignmentRepository.findAllByBadgeIdAndDateAfterAndDateBefore(
@@ -88,6 +86,10 @@ public class NewsService {
                         campaign.getEndDate()).stream())
                 .collect(Collectors.toList());
 
+        if (assignments.isEmpty()) {
+            log.info("No assignments found for {}", campaign);
+            return null;
+        }
         if (!campaign.isHiddenAlways()) {
             assignments.forEach(ba -> newsRepository.save(ba.getNews().setNewsVisibility(PUBLIC)));
         }

@@ -11,6 +11,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class CampaignRenewalJob implements Job {
 
 
     @Override
+    @Transactional
     public void execute(JobExecutionContext context) {
         String campaignIdStr = context.getTrigger().getJobDataMap().getString("campaignId");
 
