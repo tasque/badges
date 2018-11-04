@@ -36,10 +36,11 @@ public class CampaignRenewalJob implements Job {
         log.info("Renew campaign with id " + campaignIdStr);
 
         Campaign campaign = campaignRepository.findOne(Long.valueOf(campaignIdStr));
+        timeService.fitNextEndDate(campaign);
 
         Campaign nextCampaign;
         if (campaign.isGenerateResults() && newsService.prepareNews(campaign) != null) {
-            nextCampaign = new Campaign()
+            nextCampaign = campaignRepository.save(new Campaign()
                     .setCountPerCampaign(campaign.getCountPerCampaign())
                     .setCountToOneUser(campaign.getCountToOneUser())
                     .setToUsersMax(campaign.getToUsersMax())
@@ -51,13 +52,12 @@ public class CampaignRenewalJob implements Job {
                     .setImageUrl(campaign.getImageUrl())
                     .setPeriod(campaign.getPeriod())
                     .setStartDate(campaign.getStartDate())
-                    .setEndDate(campaign.getEndDate());
+                    .setEndDate(campaign.getEndDate())
+            );
         } else {
             nextCampaign = campaign;// no reason to create new campaign
         }
 
-        timeService.fitNextEndDate(nextCampaign);
-        campaignRepository.save(nextCampaign);
 
         if (campaign.isRenewPeriod()) {
             campaign.getBadges().forEach(badge -> badgeService.save(badge.setCampaign(nextCampaign)));
