@@ -2,6 +2,7 @@ package org.badges.db.campaign;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.badges.db.Badge;
 
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "campaign", schema = "public")
+@ToString(of = {"id", "description"})
 public class Campaign {
 
     @Id

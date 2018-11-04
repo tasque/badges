@@ -56,8 +56,8 @@ public class CampaignRenewalJob implements Job {
             nextCampaign = campaign;// no reason to create new campaign
         }
 
-        timeService.fitNextEndDate(campaign);
-        campaignRepository.save(campaign);
+        timeService.fitNextEndDate(nextCampaign);
+        campaignRepository.save(nextCampaign);
 
         if (campaign.isRenewPeriod()) {
             campaign.getBadges().forEach(badge -> badgeService.save(badge.setCampaign(nextCampaign)));
