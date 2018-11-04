@@ -56,8 +56,4 @@
     </changeSet>
 
 
-    <changeSet id="BADGES-6 - 5 AUTOINCREMET ID" author="Pavel N">
-        <addAutoIncrement tableName="campaign" columnName="id"/>
-    </changeSet>
-
 </databaseChangeLog>
