@@ -57,7 +57,7 @@
 
 
     <changeSet id="BADGES-6 - 5 AUTOINCREMET ID" author="Pavel N">
-        <modifyDataType tableName="campaign" columnName="id" newDataType="BIGSERIAL"/>
+        <addAutoIncrement tableName="campaign" columnName="id"/>
     </changeSet>
 
 </databaseChangeLog>
