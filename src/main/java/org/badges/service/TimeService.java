@@ -1,7 +1,7 @@
 package org.badges.service;
 
 import org.badges.db.campaign.Campaign;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
@@ -21,10 +21,11 @@ public class TimeService {
 
     public Period fitNextEndDate(Campaign campaign) {
         Period period = periodFormatter.parsePeriod(campaign.getPeriod());
+        LocalDateTime now = LocalDateTime.now();
 
-        DateTime startDate = new DateTime(campaign.getStartDate());
-        DateTime endDate = new DateTime(campaign.getEndDate());
-        while (endDate.isBeforeNow())
+        LocalDateTime startDate = new LocalDateTime(campaign.getStartDate());
+        LocalDateTime endDate = new LocalDateTime(campaign.getEndDate());
+        while (endDate.isBefore(now))
         {
             startDate = startDate.plus(period);
             endDate = endDate.plus(period);
