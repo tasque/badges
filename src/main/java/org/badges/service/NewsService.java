@@ -90,7 +90,7 @@ public class NewsService {
             log.info("No assignments found for {}", campaign);
             return null;
         }
-        if (!campaign.isHiddenAlways()) {
+        if (campaign.isHiddenBeforeEnd() && !campaign.isHiddenAlways()) {
             assignments.forEach(ba -> newsRepository.save(ba.getNews().setNewsVisibility(PUBLIC)));
         }
 

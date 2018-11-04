@@ -98,4 +98,9 @@
         <modifyDataType tableName="news" columnName="create_date" newDataType="Timestamp"/>
     </changeSet>
 
+
+    <changeSet id="BADGES-3-8 - make author nullable" author="Pavel N">
+        <dropNotNullConstraint tableName="news" columnName="author_id"/>
+    </changeSet>
+
 </databaseChangeLog>
