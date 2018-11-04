@@ -37,7 +37,7 @@ public class CampaignRenewalJob implements Job {
 
         Campaign campaign = campaignRepository.findOne(Long.valueOf(campaignIdStr));
 
-        Campaign nextCampaign = campaign;
+        Campaign nextCampaign;
         if (campaign.isGenerateResults() && newsService.prepareNews(campaign) != null) {
             nextCampaign = new Campaign()
                     .setCountPerCampaign(campaign.getCountPerCampaign())
@@ -52,6 +52,8 @@ public class CampaignRenewalJob implements Job {
                     .setPeriod(campaign.getPeriod())
                     .setStartDate(campaign.getStartDate())
                     .setEndDate(campaign.getEndDate());
+        } else {
+            nextCampaign = campaign;// no reason to create new campaign
         }
 
         timeService.fitNextEndDate(campaign);
