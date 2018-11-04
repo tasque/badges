@@ -37,17 +37,28 @@ public class CampaignRenewalJob implements Job {
 
         Campaign campaign = campaignRepository.findOne(Long.valueOf(campaignIdStr));
 
-
-        if (campaign.isGenerateResults()) {
-            newsService.prepareNews(campaign);
+        Campaign nextCampaign = campaign;
+        if (campaign.isGenerateResults() && newsService.prepareNews(campaign) != null) {
+            nextCampaign = new Campaign()
+                    .setCountPerCampaign(campaign.getCountPerCampaign())
+                    .setCountToOneUser(campaign.getCountToOneUser())
+                    .setToUsersMax(campaign.getToUsersMax())
+                    .setGenerateResults(campaign.isGenerateResults())
+                    .setHiddenAlways(campaign.isHiddenAlways())
+                    .setHiddenBeforeEnd(campaign.isHiddenBeforeEnd())
+                    .setRenewPeriod(campaign.isRenewPeriod())
+                    .setDescription(campaign.getDescription())
+                    .setImageUrl(campaign.getImageUrl())
+                    .setPeriod(campaign.getPeriod())
+                    .setStartDate(campaign.getStartDate())
+                    .setEndDate(campaign.getEndDate());
         }
 
         timeService.fitNextEndDate(campaign);
         campaignRepository.save(campaign);
 
         if (campaign.isRenewPeriod()) {
-            Campaign nextCampaign = campaignRepository.save(campaign.setId(null));
-            nextCampaign.getBadges().forEach(badge -> badgeService.save(badge.setCampaign(nextCampaign)));
+            campaign.getBadges().forEach(badge -> badgeService.save(badge.setCampaign(nextCampaign)));
 
             badgeService.rescheduleBadgeRenewal(nextCampaign);
         }
