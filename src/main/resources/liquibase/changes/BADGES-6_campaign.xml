@@ -55,4 +55,9 @@
         <modifyDataType tableName="campaign" columnName="end_date" newDataType="TIMESTAMP WITH TIME ZONE"/>
     </changeSet>
 
+
+    <changeSet id="BADGES-6 - 5 AUTOINCREMET ID" author="Pavel N">
+        <modifyDataType tableName="campaign" columnName="id" newDataType="BIGSERIAL"/>
+    </changeSet>
+
 </databaseChangeLog>
