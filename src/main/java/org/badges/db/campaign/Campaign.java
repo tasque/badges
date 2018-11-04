@@ -52,6 +52,6 @@ public class Campaign {
     private Date endDate;
 
     public boolean outOfDate(Date date) {
-        return startDate.before(date) || endDate.after(date);
+        return startDate.after(date) || endDate.before(date);
     }
 }
