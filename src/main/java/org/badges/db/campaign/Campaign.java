@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.badges.db.Badge;
+import org.badges.db.BadgeAssignment;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,6 +28,9 @@ public class Campaign {
 
     @OneToMany(mappedBy = "campaign")
     private Set<Badge> badges;
+
+    @OneToMany(mappedBy = "campaign")
+    private Set<BadgeAssignment> badgeAssignments;
 
     private int countPerCampaign;
 

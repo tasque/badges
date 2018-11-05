@@ -64,4 +64,12 @@ public class BadgeConverter {
     }
 
 
+    public BadgeNewsDto badgeNews(Badge badge) {
+        return new BadgeNewsDto()
+                .setId(badge.getId())
+                .setName(badge.getName())
+                .setImageUrl(badge.getImageUrl());
+    }
+
+
 }
