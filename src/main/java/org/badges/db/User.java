@@ -57,4 +57,8 @@ public class User {
 
     private boolean enabled;
 
+    public boolean isDisabled() {
+        return !enabled;
+    }
+
 }

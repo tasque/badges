@@ -32,6 +32,9 @@ public class LdapUserDetailsContextMapper implements UserDetailsContextMapper {
         Object mail = ctx.getObjectAttribute("mail");
         log.debug("User mail is {}", mail);
         User currentUser = userRepository.findByEmail(mail.toString());
+        if (currentUser.isDisabled()) {
+            throw new RuntimeException("User disabled");
+        }
         List<GrantedAuthority> permissions = Collections.emptyList();
         if (!CollectionUtils.isEmpty(currentUser.getUserRoles())) {
             permissions = currentUser.getUserRoles().stream().flatMap(userRole -> userRole.getUserPermissions().stream())
