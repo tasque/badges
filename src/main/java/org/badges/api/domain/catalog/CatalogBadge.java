@@ -16,4 +16,8 @@ public class CatalogBadge {
     private String category;
 
     private String imageUrl;
+
+    private Integer countLeft;
+
+    private boolean special;
 }

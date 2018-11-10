@@ -4,13 +4,20 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.badges.db.campaign.Campaign;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.Version;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -37,6 +44,14 @@ public class Badge {
     private boolean enabled;
 
     private boolean deleted;
+
+    @Enumerated(EnumType.STRING)
+    private BadgeType badgeType;
+
+
+    @ManyToOne
+    private Campaign campaign;
+
 
     @Version
     private int version;

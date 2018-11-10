@@ -1,5 +1,6 @@
 package org.badges.db;
 
 public enum NewsType {
-    BADGE_ASSIGNMENT
+    BADGE_ASSIGNMENT,
+    CAMPAIGN_RESULTS
 }

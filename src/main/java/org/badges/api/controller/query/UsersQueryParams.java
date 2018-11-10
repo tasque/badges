@@ -11,5 +11,6 @@ public class UsersQueryParams {
 
     private int size = 10;
 
+    private Long badgeId;
 
 }

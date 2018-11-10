@@ -1,4 +1,4 @@
-package org.badges.api.controller;
+package org.badges.api.controller.admin;
 
 
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users/roles")
+@RequestMapping("/api/admin/users/roles")
 @RequiredArgsConstructor
 public class UsersRoleController {
 

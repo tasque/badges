@@ -6,11 +6,15 @@ import org.badges.api.domain.catalog.CatalogBadge;
 import org.badges.api.domain.news.BadgeNewsDto;
 import org.badges.db.Badge;
 import org.badges.db.News;
+import org.badges.db.campaign.Campaign;
+import org.badges.db.repository.BadgeAssignmentRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class BadgeConverter {
+
+    private final BadgeAssignmentRepository badgeAssignmentRepository;
 
     public AdminBadge convert(Badge badge) {
         return new AdminBadge()
@@ -18,8 +22,7 @@ public class BadgeConverter {
                 .setEnabled(badge.isEnabled())
                 .setName(badge.getName())
                 .setDescription(badge.getDescription())
-                .setImageUrl(badge.getImageUrl())
-                .setVersion(badge.getVersion());
+                .setImageUrl(badge.getImageUrl());
     }
 
 
@@ -29,17 +32,28 @@ public class BadgeConverter {
                 .setEnabled(badge.isEnabled())
                 .setDescription(badge.getDescription())
                 .setImageUrl(badge.getImageUrl())
-                .setName(badge.getName())
-                .setVersion(badge.getVersion());
+                .setName(badge.getName());
     }
 
-    public CatalogBadge catalogBadge(Badge badge) {
+    public CatalogBadge catalogBadge(Badge badge, Long currentUserId) {
         return new CatalogBadge()
                 .setId(badge.getId())
                 .setCategory(badge.getCategory())
                 .setName(badge.getName())
                 .setDescription(badge.getDescription())
-                .setImageUrl(badge.getImageUrl());
+                .setImageUrl(badge.getImageUrl())
+                .setCountLeft(getCountLeft(badge, currentUserId))
+                .setSpecial(badge.getCampaign() != null);
+    }
+
+    private Integer getCountLeft(Badge badge, Long currentUserId) {
+        Campaign campaign = badge.getCampaign();
+        if (campaign == null) {
+            return null;
+        }
+        int elapsed = badgeAssignmentRepository.findAllByAssignerIdAndBadgeIdAndDateAfter(currentUserId, badge.getId(), campaign.getStartDate())
+                .size();
+        return campaign.getCountPerCampaign() - elapsed;
     }
 
     public BadgeNewsDto badgeNews(News news) {
@@ -47,6 +61,14 @@ public class BadgeConverter {
                 .setId(Long.valueOf(news.getArg0()))
                 .setName(news.getArg1())
                 .setImageUrl(news.getArg2());
+    }
+
+
+    public BadgeNewsDto badgeNews(Badge badge) {
+        return new BadgeNewsDto()
+                .setId(badge.getId())
+                .setName(badge.getName())
+                .setImageUrl(badge.getImageUrl());
     }
 
 

@@ -1,40 +1,62 @@
 package org.badges.db.campaign;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Where;
+import org.badges.db.Badge;
+import org.badges.db.BadgeAssignment;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
-@ToString(of = {"id", "name"})
-//@Entity
-//@Where(clause = "deleted=false")
+@Entity
+@Table(name = "campaign", schema = "public")
+@ToString(of = {"id", "description"})
 public class Campaign {
 
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private String name;
+    @OneToMany(mappedBy = "campaign")
+    private Set<Badge> badges;
 
-    private String userDescription;
+    @OneToMany(mappedBy = "campaign")
+    private Set<BadgeAssignment> badgeAssignments;
 
-    private BadgeCampaignStatus status;
+    private int countPerCampaign;
 
-    private BadgeCampaignRule rule;
+    private int countToOneUser;
+
+    private int toUsersMax;
+
+    private boolean hiddenBeforeEnd;
+
+    private boolean hiddenAlways;
+
+    private boolean generateResults;
+
+    private boolean renewPeriod;
+
+    private String period;
+
+    private String description;
+
+    private String imageUrl;
 
     private Date startDate;
 
     private Date endDate;
 
-    private boolean periodic;
-
-    private boolean enabled;
-
-    private boolean deleted;
-
+    public boolean outOfDate(Date date) {
+        return startDate.after(date) || endDate.before(date);
+    }
 }

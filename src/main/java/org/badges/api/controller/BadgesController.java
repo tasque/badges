@@ -2,75 +2,68 @@ package org.badges.api.controller;
 
 
 import lombok.RequiredArgsConstructor;
-import org.badges.api.domain.admin.AdminBadge;
+import org.badges.api.domain.ImportBadgeAssignment;
 import org.badges.api.domain.catalog.CatalogBadge;
+import org.badges.api.domain.news.NewsDto;
 import org.badges.db.Badge;
-import org.badges.db.UserPermission;
-import org.badges.db.repository.BadgeRepository;
-import org.badges.security.annotation.RequiredPermission;
+import org.badges.db.News;
+import org.badges.security.RequestContext;
+import org.badges.service.BadgeAssignmentService;
+import org.badges.service.BadgeService;
 import org.badges.service.converter.BadgeConverter;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.badges.service.converter.NewsConverter;
+import org.badges.service.event.NotificationService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/badges")
 @RequiredArgsConstructor
 public class BadgesController {
 
-    private final BadgeRepository badgeRepository;
+    private final BadgeAssignmentService badgeAssignmentService;
+
+    private final NotificationService notificationService;
+
+    private final NewsConverter newsConverter;
+
+    private final BadgeService badgeService;
 
     private final BadgeConverter badgeConverter;
 
+    private final RequestContext requestContext;
+
     @GetMapping("/catalog")
-    public List<CatalogBadge> catalog() {
-        return badgeRepository.findAllByEnabledTrueAndDeletedFalse().stream()
-                .map(badgeConverter::catalogBadge)
-                .collect(Collectors.toList());
+    public Map<String, List<CatalogBadge>> catalog() {
+        Map<String, List<CatalogBadge>> catalogue = new LinkedHashMap<>();
+        Long currentUserId = requestContext.getCurrentUserId();
+        List<Badge> badges = badgeService.badgesForCatalogue(currentUserId);
+
+        // campaign goes first
+        badges.sort(Comparator.comparing(badge -> badge.getCampaign() != null ? 0 : 1));
+
+        badges.forEach(badge ->
+                catalogue.computeIfAbsent(badge.getCategory(), key -> new ArrayList<>())
+                        .add(badgeConverter.catalogBadge(badge, currentUserId)));
+
+        return catalogue;
     }
 
-    /**
-     * page=0&size=2&sort=id,asc
-     * @param pageable
-     * @return
-     */
-    @RequiredPermission(UserPermission.READ_BADGE)
-    @GetMapping
-    public Page<AdminBadge> getBadges(Pageable pageable) {
-        return badgeRepository.findAllByDeletedFalse(pageable)
-                .map(badgeConverter::convert);
-    }
 
-    @RequiredPermission(UserPermission.READ_BADGE)
-    @GetMapping("/{id}")
-    public AdminBadge getBadge(@PathVariable("id") long id) {
-        return Optional.ofNullable(badgeRepository.getByDeletedFalseAndId(id))
-                .map(badgeConverter::convert)
-                .orElseThrow(() -> new EntityNotFoundException("Cannot find badge with id " + id));
-    }
+    @PostMapping("/assign")
+    public NewsDto assignBadge(@RequestBody ImportBadgeAssignment importBadgeAssignment) {
+        News news = badgeAssignmentService.assignBadge(importBadgeAssignment);
+        notificationService.notifyUsers(news);
 
-    @RequiredPermission(UserPermission.UPDATE_BADGE)
-    @PostMapping
-    public AdminBadge save(AdminBadge badge) {
-        Badge saved = badgeRepository.save(badgeConverter.convert(badge));
-        return badgeConverter.convert(saved);
-    }
-
-    @RequiredPermission(UserPermission.DELETE_BADGE)
-    @DeleteMapping
-    public void delete(long id) {
-        Optional.ofNullable(badgeRepository.getByDeletedFalseAndId(id))
-                .map(badge -> badgeRepository.save(badge.setDeleted(true)))
-                .orElseThrow(() -> new EntityNotFoundException("Cannot find badge with id " + id));
+        return newsConverter.shortConvert(news);
     }
 }

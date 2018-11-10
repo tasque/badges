@@ -12,6 +12,9 @@ import java.util.stream.Collectors;
 public class UserConverter {
 
     public UserNewsDto convertForNews(User user) {
+        if (user == null) {
+            return null;
+        }
         return new UserNewsDto()
                 .setId(user.getId())
                 .setImageUrl(user.getImageUrl())

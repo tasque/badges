@@ -84,4 +84,23 @@
         </sql>
     </changeSet>
 
+    <changeSet id="BADGES-3-6 - new visibility" author="Pavel N">
+        <addColumn tableName="news">
+            <column name="news_visibility" type="VARCHAR(100)" defaultValue="PUBLIC">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <dropDefaultValue tableName="news" columnName="news_visibility"/>
+    </changeSet>
+
+
+    <changeSet id="BADGES-3-7 - change date type" author="Pavel N">
+        <modifyDataType tableName="news" columnName="create_date" newDataType="Timestamp"/>
+    </changeSet>
+
+
+    <changeSet id="BADGES-3-8 - make author nullable" author="Pavel N">
+        <dropNotNullConstraint tableName="news" columnName="author_id"/>
+    </changeSet>
+
 </databaseChangeLog>

@@ -23,7 +23,4 @@ public class AdminBadge {
 
     private boolean enabled;
 
-    @NotNull
-    @Min(0)
-    private Integer version;
 }

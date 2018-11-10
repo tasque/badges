@@ -55,7 +55,7 @@ public class BadgeAssignmentServiceTest {
         when(requestContext.getCurrentUser()).thenReturn(new User().setId(3L));
         when(userRepository.findOne(4L)).thenReturn(new User().setId(4L));
         when(userRepository.findOne(5L)).thenReturn(new User().setId(5L));
-        when(badgeRepository.getOne(2L)).thenReturn(new Badge().setId(2L));
+        when(badgeRepository.getOne(2L)).thenReturn(new Badge().setId(2L).setEnabled(true));
         when(newsService.prepareNews(captor.capture())).thenReturn(new News().setId(6L));
 
         // when
