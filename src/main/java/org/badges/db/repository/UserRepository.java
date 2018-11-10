@@ -17,4 +17,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
                     "and u.id != :id " +
                     "limit :size")
     List<User> findUsers(@Param("search") String search, @Param("id") Long id, @Param("size") int size);
+
+    User findByEmail(String email);
 }

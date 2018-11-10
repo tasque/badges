@@ -10,10 +10,10 @@ import java.util.Collection;
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
 public class UserPrincipal extends User {
-    private final Long id;
+    private final org.badges.db.User user;
 
-    public UserPrincipal(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(org.badges.db.User user, String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
-        this.id = id;
+        this.user = user;
     }
 }
