@@ -39,7 +39,7 @@ public class LdapUserDetailsContextMapper implements UserDetailsContextMapper {
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
         }
-        return new UserPrincipal(currentUser, username, null, permissions);
+        return new UserPrincipal(currentUser, username, "", permissions);
     }
 
     @Override
