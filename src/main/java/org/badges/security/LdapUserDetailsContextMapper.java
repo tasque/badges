@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.ldap.userdetails.UserDetailsContextMapper;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
@@ -26,6 +27,7 @@ public class LdapUserDetailsContextMapper implements UserDetailsContextMapper {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails mapUserFromContext(DirContextOperations ctx, String username, Collection<? extends GrantedAuthority> authorities) {
         Object mail = ctx.getObjectAttribute("mail");
         log.debug("User mail is {}", mail);
