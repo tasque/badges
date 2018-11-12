@@ -33,7 +33,7 @@ public class CampaignService {
         if (campaign.isHiddenAlways()) {
             throw new EntityNotFoundException("Campaign is hidden");
         }
-        if (campaign.isHiddenBeforeEnd() && campaign.getEndDate().after(new Date())) {
+        if (campaign.isHiddenBeforeEnd() && campaign.getEndDate().before(new Date())) {
             throw new EntityNotFoundException("Campaign is not open yet");
         }
 
