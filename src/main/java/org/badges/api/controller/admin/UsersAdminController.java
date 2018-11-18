@@ -2,6 +2,7 @@ package org.badges.api.controller.admin;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.badges.api.domain.UserDto;
@@ -64,14 +65,14 @@ public class UsersAdminController {
         XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
         XSSFSheet sheet = workbook.getSheetAt(0);
         sheet.forEach(row -> {
-            String email = row.getCell(1).getStringCellValue();
+            String email = getStringCellValue(row.getCell(1));
             User user = usersByEmail.computeIfAbsent(email, key -> new User().setAddress(email));
 
-            user.setName(row.getCell(0).getStringCellValue())
-                    .setAddress(row.getCell(2).getStringCellValue())
-                    .setTitle(row.getCell(3).getStringCellValue())
-                    .setDescription(row.getCell(4).getStringCellValue())
-                    .setImageUrl(row.getCell(5).getStringCellValue())
+            user.setName(getStringCellValue(row.getCell(0)))
+                    .setAddress(getStringCellValue(row.getCell(2)))
+                    .setTitle(getStringCellValue(row.getCell(3)))
+                    .setDescription(getStringCellValue(row.getCell(4)))
+                    .setImageUrl(getStringCellValue(row.getCell(5)))
                     .setEnabled(true);
 
             userRepository.save(user);
@@ -80,5 +81,12 @@ public class UsersAdminController {
         usersByEmail.values().forEach(u -> u.setEnabled(false));
 
         return Collections.emptyList();
+    }
+
+    private String getStringCellValue(Cell cell) {
+        if (cell == null) {
+            return null;
+        }
+        return cell.getStringCellValue();
     }
 }
