@@ -25,6 +25,7 @@
         <springfox-swagger2.version>2.8.0</springfox-swagger2.version>
         <testcontainers.postgres.version>1.7.3</testcontainers.postgres.version>
         <querydsl-jpa.version>4.1.4</querydsl-jpa.version>
+        <apache-poi.version>4.0.0</apache-poi.version>
     </properties>
 
     <dependencies>
@@ -87,6 +88,16 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${apache-poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${apache-poi.version}</version>
         </dependency>
 
         <dependency>
