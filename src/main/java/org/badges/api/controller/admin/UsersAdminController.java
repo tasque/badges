@@ -65,8 +65,19 @@ public class UsersAdminController {
         XSSFSheet sheet = workbook.getSheetAt(0);
         sheet.forEach(row -> {
             String email = row.getCell(1).getStringCellValue();
-            log.info(email + usersByEmail.get(email) + row);
+            User user = usersByEmail.computeIfAbsent(email, key -> new User().setAddress(email));
+
+            user.setName(row.getCell(0).getStringCellValue())
+                    .setAddress(row.getCell(2).getStringCellValue())
+                    .setTitle(row.getCell(3).getStringCellValue())
+                    .setDescription(row.getCell(4).getStringCellValue())
+                    .setImageUrl(row.getCell(5).getStringCellValue())
+                    .setEnabled(true);
+
+            userRepository.save(user);
+            usersByEmail.remove(email);
         });
+        usersByEmail.values().forEach(u -> u.setEnabled(false));
 
         return Collections.emptyList();
     }
