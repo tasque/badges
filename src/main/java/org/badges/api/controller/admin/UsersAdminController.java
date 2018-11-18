@@ -66,7 +66,8 @@ public class UsersAdminController {
         XSSFSheet sheet = workbook.getSheetAt(0);
         sheet.forEach(row -> {
             String email = getStringCellValue(row.getCell(1));
-            User user = usersByEmail.computeIfAbsent(email, key -> new User().setAddress(email));
+            User user = usersByEmail.computeIfAbsent(email,
+                    key -> userRepository.save(new User().setName("").setAddress(email)));
 
             user.setName(getStringCellValue(row.getCell(0)))
                     .setAddress(getStringCellValue(row.getCell(2)))
@@ -75,7 +76,6 @@ public class UsersAdminController {
                     .setImageUrl(getStringCellValue(row.getCell(5)))
                     .setEnabled(true);
 
-            userRepository.save(user);
             usersByEmail.remove(email);
         });
         usersByEmail.values().forEach(u -> u.setEnabled(false));
