@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityNotFoundException;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.badges.db.NewsVisibility.PUBLIC;
@@ -79,12 +79,7 @@ public class NewsService {
     }
 
     public News prepareNews(Campaign campaign) {
-        List<BadgeAssignment> assignments = campaign.getBadges().stream()
-                .flatMap(b -> badgeAssignmentRepository.findAllByBadgeIdAndDateAfterAndDateBefore(
-                        b.getId(),
-                        campaign.getStartDate(),
-                        campaign.getEndDate()).stream())
-                .collect(Collectors.toList());
+        Set<BadgeAssignment> assignments = campaign.getBadgeAssignments();
 
         if (assignments.isEmpty()) {
             log.info("No assignments found for {}", campaign);
