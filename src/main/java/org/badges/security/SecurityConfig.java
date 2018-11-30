@@ -37,7 +37,8 @@ public class SecurityConfig
                 .authorizeRequests()
                 .antMatchers("/login*").anonymous()
                 .antMatchers("/api/**").authenticated()
-                .and().formLogin().loginPage("/login-page").loginProcessingUrl("/login").permitAll();
+                .and().formLogin().loginPage("/login-page").loginProcessingUrl("/login").permitAll()
+                .and().sessionManagement().maximumSessions(1);
     }
 
     @Bean
@@ -51,7 +52,6 @@ public class SecurityConfig
 
         return provider;
     }
-
 
 
     // AuthenticationEntryPoint, AccessDeniedHandler, Filter
