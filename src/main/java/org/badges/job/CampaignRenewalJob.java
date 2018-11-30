@@ -36,7 +36,6 @@ public class CampaignRenewalJob implements Job {
         log.info("Renew campaign with id " + campaignIdStr);
 
         Campaign campaign = campaignRepository.findOne(Long.valueOf(campaignIdStr));
-        timeService.fitNextEndDate(campaign);
 
         Campaign nextCampaign;
         if (campaign.isGenerateResults() && newsService.prepareNews(campaign) != null) {
@@ -60,6 +59,8 @@ public class CampaignRenewalJob implements Job {
 
 
         if (campaign.isRenewPeriod()) {
+            timeService.fitNextEndDate(nextCampaign);
+
             campaign.getBadges().forEach(badge -> badgeService.save(badge.setCampaign(nextCampaign)));
 
             badgeService.rescheduleBadgeRenewal(nextCampaign);
