@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(nativeQuery = true, value =
             "select * from public.user u " +
                     "where u.enabled = true " +
-                    "   and (u.name ilike '%search%' or u.native_name ilike 'search') " +
+                    "   and (u.name ilike '%:search%' or u.native_name ilike '%:search%') " +
                     "and u.id != :id " +
                     "limit :size")
     List<User> findUsers(@Param("search") String search, @Param("id") Long id, @Param("size") int size);
