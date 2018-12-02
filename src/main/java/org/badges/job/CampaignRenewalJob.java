@@ -6,6 +6,7 @@ import org.badges.db.campaign.Campaign;
 import org.badges.db.repository.CampaignRepository;
 import org.badges.service.BadgeService;
 import org.badges.service.NewsService;
+import org.badges.service.SchedulingService;
 import org.badges.service.TimeService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -26,6 +27,8 @@ public class CampaignRenewalJob implements Job {
     private final TimeService timeService;
 
     private final NewsService newsService;
+
+    private final SchedulingService schedulingService;
 
 
     @Override
@@ -63,7 +66,7 @@ public class CampaignRenewalJob implements Job {
 
             campaign.getBadges().forEach(badge -> badgeService.save(badge.setCampaign(nextCampaign)));
 
-            badgeService.rescheduleBadgeRenewal(nextCampaign);
+            schedulingService.rescheduleBadgeRenewal(nextCampaign);
         }
 
     }

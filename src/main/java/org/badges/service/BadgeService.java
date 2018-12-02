@@ -1,28 +1,17 @@
 package org.badges.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.badges.db.Badge;
 import org.badges.db.BadgeAssignment;
 import org.badges.db.campaign.Campaign;
 import org.badges.db.repository.BadgeAssignmentRepository;
 import org.badges.db.repository.BadgeRepository;
-import org.badges.job.CampaignRenewalJob;
-import org.quartz.JobBuilder;
-import org.quartz.JobDataMap;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
-import org.quartz.TriggerKey;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -33,7 +22,6 @@ public class BadgeService {
 
     private final BadgeAssignmentRepository badgeAssignmentRepository;
 
-    private final Scheduler scheduler;
 
 
     @Transactional(readOnly = true)
@@ -74,36 +62,6 @@ public class BadgeService {
     }
 
 
-    @SneakyThrows
-    public void rescheduleBadgeRenewal(Campaign campaign) {
-        if (campaign == null) {
-            return;
-        }
-        long campaignId = campaign.getId();
-        JobDetail jobDetail = JobBuilder.newJob()
-                .withIdentity(CampaignRenewalJob.class.getSimpleName() + "-" + campaignId)
-                .storeDurably()
-                .ofType(CampaignRenewalJob.class)
-                .build();
-
-        if (scheduler.checkExists(jobDetail.getKey())) {
-            log.warn("Found scheduled triggers for " + jobDetail);
-            List<TriggerKey> triggers = scheduler.getTriggersOfJob(jobDetail.getKey()).stream()
-                    .map(Trigger::getKey)
-                    .collect(Collectors.toList());
-            scheduler.unscheduleJobs(triggers);
-        }
-
-        JobDataMap jobDataMap = new JobDataMap();
-        jobDataMap.put("campaignId", campaignId + "");
-
-        Trigger trigger = TriggerBuilder.newTrigger()
-                .forJob(jobDetail)
-                .startAt(campaign.getEndDate())
-                .usingJobData(jobDataMap)
-                .build();
-        scheduler.scheduleJob(jobDetail, Collections.singleton(trigger), true);
-    }
 
     public Badge save(Badge badge) {
         return badgeRepository.save(badge);

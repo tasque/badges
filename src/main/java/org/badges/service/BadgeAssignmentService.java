@@ -34,6 +34,8 @@ public class BadgeAssignmentService {
 
     private final NewsService newsService;
 
+//    private final SchedulingService schedulingService;
+
     private final RequestContext requestContext;
 
     @Transactional
@@ -58,6 +60,8 @@ public class BadgeAssignmentService {
 
         News news = newsService.prepareNews(badgeAssignment);
         badgeAssignment.setNews(news);
+
+//        schedulingService.checkCampaignJob(badge.getCampaign());
         return news;
     }
 

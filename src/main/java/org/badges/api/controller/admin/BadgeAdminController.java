@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.badges.api.domain.admin.AdminBadge;
 import org.badges.db.Badge;
 import org.badges.db.UserPermission;
+import org.badges.db.campaign.Campaign;
 import org.badges.db.repository.BadgeRepository;
 import org.badges.security.annotation.RequiredPermission;
 import org.badges.service.BadgeService;
+import org.badges.service.SchedulingService;
 import org.badges.service.converter.BadgeConverter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +35,8 @@ public class BadgeAdminController {
 
     private final BadgeService badgeService;
 
+    private final SchedulingService schedulingService;
+
     /**
      * page=0&size=2&sort=id,asc
      *
@@ -50,7 +54,6 @@ public class BadgeAdminController {
     @GetMapping("/{id}")
     public Badge getBadge(@PathVariable("id") long id) {
         Badge badge = badgeRepository.getByDeletedFalseAndId(id);
-        badgeService.rescheduleBadgeRenewal(badge.getCampaign());
         Optional.of(badge)
                 .map(Badge::getCampaign)
                 .ifPresent(badgeCampaignRule -> badgeCampaignRule.setBadges(null));
@@ -58,11 +61,20 @@ public class BadgeAdminController {
     }
 
     @RequiredPermission(UserPermission.UPDATE_BADGE)
+    @GetMapping("/reschedule-campaign/{id}")
+    public Campaign rescheduleCampaign(@PathVariable("id") long id) {
+        Badge badge = badgeRepository.getByDeletedFalseAndId(id);
+        Campaign campaign = badge.getCampaign();
+        schedulingService.rescheduleBadgeRenewal(campaign);
+        return campaign;
+    }
+
+    @RequiredPermission(UserPermission.UPDATE_BADGE)
     @PostMapping
     public AdminBadge save(Badge badge) {
         Badge saved = badgeRepository.save(badge);
 
-        badgeService.rescheduleBadgeRenewal(saved.getCampaign());
+        schedulingService.rescheduleBadgeRenewal(saved.getCampaign());
 
         return badgeConverter.convert(saved);
     }
