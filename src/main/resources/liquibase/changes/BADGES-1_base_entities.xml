@@ -104,4 +104,12 @@
     </changeSet>
 
 
+
+    <changeSet id="BADGES-1-6 - add native name for user" author="Pavel N">
+        <addColumn tableName="badge">
+            <column name="native_name" type="VARCHAR(255)" afterColumn="name"/>
+        </addColumn>
+    </changeSet>
+
+
 </databaseChangeLog>

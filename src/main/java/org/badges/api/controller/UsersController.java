@@ -32,11 +32,10 @@ public class UsersController {
 
     @GetMapping("/search")
     public List<UserDto> search(UsersQueryParams usersQueryParams) {
-        List<User> result = userRepository.findByNameContainingIgnoreCaseAndEnabledIsTrueAndIdIsNot(
-                usersQueryParams.getName().trim(), requestContext.getCurrentUserId());
+        List<User> result = userRepository.findUsers(
+                usersQueryParams.getName().trim(), requestContext.getCurrentUserId(), usersQueryParams.getSize());
         return badgeAssignmentService.filterUsers(result, usersQueryParams.getBadgeId())
                 .stream()
-                .limit(usersQueryParams.getSize())
                 .map(userConverter::convertUser)
                 .collect(Collectors.toList());
     }
