@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(nativeQuery = true, value =
-            "select * from user u " +
+            "select u.* from public.user u " +
                     "where u.enabled = true " +
                     "   and (u.name ilike %:search% or u.native_name ilike %:search%) " +
                     "and u.id != :id " +
