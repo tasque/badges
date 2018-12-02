@@ -74,6 +74,7 @@ public class UsersAdminController {
                     .setTitle(getStringCellValue(row.getCell(3)))
                     .setDescription(getStringCellValue(row.getCell(4)))
                     .setImageUrl(getStringCellValue(row.getCell(5)))
+                    .setNativeName(getStringCellValue(row.getCell(6)))
                     .setEnabled(true);
 
             usersByEmail.remove(email);
