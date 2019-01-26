@@ -65,16 +65,19 @@ public class UsersAdminController {
         XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
         XSSFSheet sheet = workbook.getSheetAt(0);
         sheet.forEach(row -> {
-            String email = getStringCellValue(row.getCell(1));
+            String email = getStringCellValue(row.getCell(3));
             User user = usersByEmail.computeIfAbsent(email,
                     key -> userRepository.save(new User().setName("").setAddress(email)));
 
-            user.setName(getStringCellValue(row.getCell(0)))
-                    .setAddress(getStringCellValue(row.getCell(2)))
-                    .setTitle(getStringCellValue(row.getCell(3)))
-                    .setDescription(getStringCellValue(row.getCell(4)))
-                    .setImageUrl(getStringCellValue(row.getCell(5)))
-                    .setNativeName(getStringCellValue(row.getCell(6)))
+            user
+                    .setNativeName(getStringCellValue(row.getCell(0)))
+                    .setName(getStringCellValue(row.getCell(1)))
+                    .setTitle(getStringCellValue(row.getCell(2)))
+                    .setDateOfBirth(row.getCell(4).getDateCellValue())
+                    .setMessenger(getStringCellValue(row.getCell(5)))
+//                    .setAddress(getStringCellValue(row.getCell(2)))
+//                    .setDescription(getStringCellValue(row.getCell(4)))
+                    .setImageUrl(getStringCellValue(row.getCell(6)))
                     .setEnabled(true);
 
             usersByEmail.remove(email);

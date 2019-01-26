@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Set;
 
 
@@ -56,6 +57,10 @@ public class User {
     private Set<UserRole> userRoles = Collections.emptySet();
 
     private boolean enabled;
+
+    private Date dateOfBirth;
+
+    private String messenger;
 
     public boolean isDisabled() {
         return !enabled;
