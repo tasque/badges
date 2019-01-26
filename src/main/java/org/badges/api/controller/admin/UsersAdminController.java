@@ -67,16 +67,13 @@ public class UsersAdminController {
         sheet.forEach(row -> {
             String email = getStringCellValue(row.getCell(3));
             User user = usersByEmail.computeIfAbsent(email,
-                    key -> userRepository.save(new User().setName("").setAddress(email)));
+                    key -> userRepository.save(new User().setName("").setEmail(email)));
 
-            user
-                    .setNativeName(getStringCellValue(row.getCell(0)))
+            user.setNativeName(getStringCellValue(row.getCell(0)))
                     .setName(getStringCellValue(row.getCell(1)))
                     .setTitle(getStringCellValue(row.getCell(2)))
                     .setDateOfBirth(row.getCell(4).getDateCellValue())
                     .setMessenger(getStringCellValue(row.getCell(5)))
-//                    .setAddress(getStringCellValue(row.getCell(2)))
-//                    .setDescription(getStringCellValue(row.getCell(4)))
                     .setImageUrl(getStringCellValue(row.getCell(6)))
                     .setEnabled(true);
 
