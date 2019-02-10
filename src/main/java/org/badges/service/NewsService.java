@@ -31,6 +31,7 @@ public class NewsService {
 
     private final NewsRepository newsRepository;
 
+
     private final BadgeAssignmentRepository badgeAssignmentRepository;
 
     public Page<News> findNews(NewsQueryParams pageable) {
@@ -53,6 +54,7 @@ public class NewsService {
         if (news.isDeleted()) {
             throw new EntityNotFoundException("Not found news " + id);
         }
+
         return news;
     }
 
@@ -109,8 +111,7 @@ public class NewsService {
     private void defineNewsVisibility(BadgeAssignment badgeAssignment, News news) {
         news.setNewsVisibility(NewsVisibility.PUBLIC);
         Campaign campaign = badgeAssignment.getBadge().getCampaign();
-        if (campaign != null)
-        {
+        if (campaign != null) {
             if (campaign.isHiddenBeforeEnd() || campaign.isHiddenAlways()) {
                 news.setNewsVisibility(NewsVisibility.PRIVATE);
             }
