@@ -82,12 +82,14 @@ public class NewsController {
         if (happyBirthday.isPresent()) {
             Badge badge = happyBirthday.get();
             List<User> toUsers = userRepository.findUsersWithoutBadge(badge.getId(), currentUserId);
-            result.add(new AchtungNewsDto()
-                    .setActionRequired(ActionRequiredType.ASSIGN_BADGE)
-                    .setEntityId(badge.getId())
-                    .setComment(badge.getName())
-                    .setImageUrl(badge.getImageUrl())
-                    .setToUsers(toUsers.stream().map(userConverter::convertForNews).collect(Collectors.toList())));
+            if (!toUsers.isEmpty()) {
+                result.add(new AchtungNewsDto()
+                        .setActionRequired(ActionRequiredType.ASSIGN_BADGE)
+                        .setEntityId(badge.getId())
+                        .setComment(badge.getName())
+                        .setImageUrl(badge.getImageUrl())
+                        .setToUsers(toUsers.stream().map(userConverter::convertForNews).collect(Collectors.toList())));
+            }
         }
 
         result.addAll(campaignService.getRecentCampaigns());
