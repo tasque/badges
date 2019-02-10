@@ -13,7 +13,7 @@ public interface UserNewsViewRepository extends JpaRepository<UserNewsView, Long
 
 
     @Modifying
-    @Query(value = "INSERT INTO user_news_views (user_id, entity_id, event_type) " +
+    @Query(value = "INSERT INTO public.user_news_views (user_id, entity_id, event_type) " +
             "VALUES (:userId, :entityId), :eventType) ON CONFLICT DO NOTHING", nativeQuery = true)
     void saveQuietly(@Param("userId") Long userId, @Param("entityId") Long entityId, @Param("eventType") UserViewEventType eventType);
 
