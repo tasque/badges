@@ -48,7 +48,7 @@ public class CampaignService {
             throw new EntityNotFoundException("Campaign is not open yet");
         }
 
-        userNewsViewRepository.saveQuietly(requestContext.getCurrentUserId(), campaign.getId(), UserViewEventType.OPEN_CAMPAIGN_RESULTS);
+        userNewsViewRepository.saveQuietly(requestContext.getCurrentUserId(), campaign.getId(), UserViewEventType.OPEN_CAMPAIGN_RESULTS.name());
 
         return campaign.getBadgeAssignments().stream()
                 .filter(ba -> ba.getNews().getNewsVisibility() == NewsVisibility.PUBLIC)
