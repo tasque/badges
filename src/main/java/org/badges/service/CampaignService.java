@@ -68,7 +68,7 @@ public class CampaignService {
                 .collect(Collectors.toSet());
         List<Campaign> participatedCampaigns = campaignRepository.findRecentCampaigns(requestContext.getCurrentUserId());
 
-        return participatedCampaigns.stream().filter(c -> viewedCampaigns.contains(c.getId()))
+        return participatedCampaigns.stream().filter(c -> !viewedCampaigns.contains(c.getId()))
                 .map(c -> new AchtungNewsDto().setEntityId(c.getId())
                         .setComment(c.getDescription())
                         .setActionRequired(ActionRequiredType.LOOK_AT_CAMPAIGN_RESULTS)
