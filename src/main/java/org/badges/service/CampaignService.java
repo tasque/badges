@@ -5,7 +5,7 @@ import org.badges.api.domain.news.AchtungNewsDto;
 import org.badges.api.domain.news.ActionRequiredType;
 import org.badges.api.domain.news.CampaignBadgeAssignmentNews;
 import org.badges.db.NewsVisibility;
-import org.badges.db.UserNewsView;
+import org.badges.db.UserNewsViews;
 import org.badges.db.UserViewEventType;
 import org.badges.db.campaign.Campaign;
 import org.badges.db.repository.CampaignRepository;
@@ -64,7 +64,7 @@ public class CampaignService {
     @Transactional(readOnly = true)
     public List<AchtungNewsDto> getRecentCampaigns() {
         Set<Long> viewedCampaigns = userNewsViewRepository.findAllByUserIdAndEventType(requestContext.getCurrentUserId(), UserViewEventType.OPEN_CAMPAIGN_RESULTS)
-                .stream().map(UserNewsView::getEntityId)
+                .stream().map(UserNewsViews::getEntityId)
                 .collect(Collectors.toSet());
         List<Campaign> participatedCampaigns = campaignRepository.findRecentCampaigns(requestContext.getCurrentUserId());
 

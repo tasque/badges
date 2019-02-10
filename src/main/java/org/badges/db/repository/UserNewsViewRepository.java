@@ -1,6 +1,6 @@
 package org.badges.db.repository;
 
-import org.badges.db.UserNewsView;
+import org.badges.db.UserNewsViews;
 import org.badges.db.UserViewEventType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface UserNewsViewRepository extends JpaRepository<UserNewsView, Long> {
+public interface UserNewsViewRepository extends JpaRepository<UserNewsViews, Long> {
 
 
     @Modifying
@@ -17,5 +17,5 @@ public interface UserNewsViewRepository extends JpaRepository<UserNewsView, Long
             "VALUES (:userId, :entityId), :eventType) ON CONFLICT DO NOTHING", nativeQuery = true)
     void saveQuietly(@Param("userId") Long userId, @Param("entityId") Long entityId, @Param("eventType") UserViewEventType eventType);
 
-    List<UserNewsView> findAllByUserIdAndEventType(Long userId, UserViewEventType eventType);
+    List<UserNewsViews> findAllByUserIdAndEventType(Long userId, UserViewEventType eventType);
 }

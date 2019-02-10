@@ -16,7 +16,7 @@ import javax.persistence.Id;
 @EqualsAndHashCode(of = {""})
 @ToString
 @Entity
-public class UserNewsView {
+public class UserNewsViews {
 
 
     @Id

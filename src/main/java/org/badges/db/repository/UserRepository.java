@@ -25,6 +25,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                     "inner join user_badge_assignment uba on u.id = uba.user_id " +
                     "inner join badge_assignment ba on uba.badge_assignment_id = ba.id " +
                     "where u.date_of_birth = date (now()) " +
+                    "   and u.id != :userId " +
                     "   and date(ba.date) = date (now()) " +
                     "   and ba.badge_id = :badgeId " +
                     "   and ba.assigner_id = :userId ")
