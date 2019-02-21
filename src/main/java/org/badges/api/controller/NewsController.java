@@ -81,7 +81,7 @@ public class NewsController {
 
         if (happyBirthday.isPresent()) {
             Badge badge = happyBirthday.get();
-            List<User> toUsers = userRepository.findUsersWithoutBadge(badge.getId(), currentUserId);
+            List<User> toUsers = userRepository.findUsersWithoutHappyBirthday(badge.getId(), currentUserId);
             if (!toUsers.isEmpty()) {
                 result.add(new AchtungNewsDto()
                         .setActionRequired(ActionRequiredType.ASSIGN_BADGE)

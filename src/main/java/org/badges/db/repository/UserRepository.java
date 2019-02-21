@@ -21,13 +21,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
     @Query(nativeQuery = true, value =
-            "select u.* from public.user u " +
-                    "inner join user_badge_assignment uba on u.id = uba.user_id " +
-                    "inner join badge_assignment ba on uba.badge_assignment_id = ba.id " +
+            "select distinct u.* from public.user u " +
+                    "left join user_badge_assignment uba on u.id = uba.user_id " +
+                    "left join badge_assignment ba on uba.badge_assignment_id = ba.id " +
+                    "       and date(ba.date) = date (now()) " +
+                    "       and ba.badge_id = :badgeId " +
+                    "       and ba.assigner_id = :userId " +
                     "where u.date_of_birth = date (now()) " +
                     "   and u.id != :userId " +
-                    "   and date(ba.date) = date (now()) " +
-                    "   and ba.badge_id = :badgeId " +
-                    "   and ba.assigner_id = :userId ")
-    List<User> findUsersWithoutBadge(@Param("badgeId") Long badgeId, @Param("userId") Long userId);
+                    "   and ba.id is null")
+    List<User> findUsersWithoutHappyBirthday(@Param("badgeId") Long badgeId, @Param("userId") Long userId);
 }
