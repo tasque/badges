@@ -15,7 +15,7 @@ public interface UserNewsViewRepository extends JpaRepository<UserNewsViews, Lon
     @Modifying
     @Query(value = "INSERT INTO public.user_news_views (user_id, entity_id, event_type) " +
             "VALUES (:userId, :entityId, :eventType) " +
-            "ON CONFLICT (user_news_views_user_id_entity_id_event_type_key) DO update set count_of_views = count_of_views + 1", nativeQuery = true)
+            "ON CONFLICT (unique_unw_user_entity_event) DO update set count_of_views = count_of_views + 1", nativeQuery = true)
     void saveQuietly(@Param("userId") Long userId, @Param("entityId") Long entityId, @Param("eventType") String eventType);
 
     List<UserNewsViews> findAllByUserIdAndEventType(Long userId, UserViewEventType eventType);
