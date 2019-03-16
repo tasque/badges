@@ -26,7 +26,7 @@
             </column>
 
         </createTable>
-        <addUniqueConstraint tableName="user_news_views"
+        <addUniqueConstraint tableName="user_news_views" constraintName="unique_unw_user_entity_event"
                              columnNames="user_id, entity_id, event_type"/>
     </changeSet>
 

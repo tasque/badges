@@ -77,10 +77,16 @@ public class CampaignService {
                 .filter(Objects::nonNull).collect(Collectors.toSet());
 
         List<Campaign> recentCampaigns = campaignRepository.findRecentCampaigns(currentUserId, now);
-        recentCampaigns.stream().filter(c -> !c.isHiddenAlways()).forEach(campaigns::add);
+        recentCampaigns.stream()
+                .filter(c -> !c.isHiddenAlways())
+                .filter(c -> !c.getBadgeAssignments().isEmpty())
+                .forEach(campaigns::add);
 
         List<Campaign> activeCampaigns = campaignRepository.findActiveCampaigns(currentUserId, now);
-        activeCampaigns.stream().filter(c -> !c.isHiddenBeforeEnd()).forEach(campaigns::add);
+        activeCampaigns.stream()
+                .filter(c -> !c.isHiddenBeforeEnd())
+                .filter(c -> !c.getBadgeAssignments().isEmpty())
+                .forEach(campaigns::add);
 
 
         return campaigns.stream()
