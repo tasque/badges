@@ -30,5 +30,11 @@
                              columnNames="user_id, entity_id, event_type"/>
     </changeSet>
 
+    <changeSet author="Pavel N" id="BADGES-7 - 2 - count of views">
+        <addColumn tableName="user_news_views">
+            <column name="count_of_views" defaultValue="1" type="INT"/>
+        </addColumn>
+    </changeSet>
+
 
 </databaseChangeLog>

@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.badges.api.domain.news.AchtungNewsDto;
 import org.badges.api.domain.news.ActionRequiredType;
 import org.badges.api.domain.news.CampaignBadgeAssignmentNews;
+import org.badges.api.domain.news.UserNewsDto;
+import org.badges.db.Badge;
 import org.badges.db.NewsVisibility;
-import org.badges.db.UserNewsViews;
 import org.badges.db.UserViewEventType;
 import org.badges.db.campaign.Campaign;
 import org.badges.db.repository.CampaignRepository;
@@ -18,9 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -44,11 +46,14 @@ public class CampaignService {
         if (campaign.isHiddenAlways()) {
             throw new EntityNotFoundException("Campaign is hidden");
         }
-        if (campaign.isHiddenBeforeEnd() && campaign.getEndDate().after(new Date())) {
+        Date now = new Date();
+        if (campaign.isHiddenBeforeEnd() && campaign.getEndDate().after(now)) {
             throw new EntityNotFoundException("Campaign is not open yet");
         }
 
-        userNewsViewRepository.saveQuietly(requestContext.getCurrentUserId(), campaign.getId(), UserViewEventType.OPEN_CAMPAIGN_RESULTS.name());
+        if (campaign.outOfDate(now)) {
+            userNewsViewRepository.saveQuietly(requestContext.getCurrentUserId(), campaign.getId(), UserViewEventType.OPEN_CAMPAIGN_RESULTS.name());
+        }
 
         return campaign.getBadgeAssignments().stream()
                 .filter(ba -> ba.getNews().getNewsVisibility() == NewsVisibility.PUBLIC)
@@ -62,18 +67,53 @@ public class CampaignService {
     }
 
     @Transactional(readOnly = true)
-    public List<AchtungNewsDto> getRecentCampaigns() {
-        Set<Long> viewedCampaigns = userNewsViewRepository.findAllByUserIdAndEventType(requestContext.getCurrentUserId(), UserViewEventType.OPEN_CAMPAIGN_RESULTS)
-                .stream().map(UserNewsViews::getEntityId)
-                .collect(Collectors.toSet());
-        List<Campaign> participatedCampaigns = campaignRepository.findRecentCampaigns(requestContext.getCurrentUserId());
+    public List<AchtungNewsDto> getRecentCampaigns(List<Badge> catalogue) {
+        Date now = new Date();
+        Long currentUserId = requestContext.getCurrentUserId();
 
-        return participatedCampaigns.stream().filter(c -> !viewedCampaigns.contains(c.getId()))
-                .map(c -> new AchtungNewsDto().setEntityId(c.getId())
-                        .setComment(c.getDescription())
-                        .setActionRequired(ActionRequiredType.LOOK_AT_CAMPAIGN_RESULTS)
-                        .setImageUrl(c.getImageUrl())
-                        .setToUsers(c.getBadgeAssignments().stream().flatMap(ba -> ba.getToUsers().stream().distinct()).map(userConverter::convertForNews).collect(Collectors.toList())))
+
+        Collection<Campaign> campaigns = catalogue.stream()
+                .map(Badge::getCampaign)
+                .filter(Objects::nonNull).collect(Collectors.toSet());
+
+        List<Campaign> recentCampaigns = campaignRepository.findRecentCampaigns(currentUserId, now);
+        recentCampaigns.stream().filter(c -> !c.isHiddenAlways()).forEach(campaigns::add);
+
+        List<Campaign> activeCampaigns = campaignRepository.findActiveCampaigns(currentUserId, now);
+        activeCampaigns.stream().filter(c -> !c.isHiddenBeforeEnd()).forEach(campaigns::add);
+
+
+        return campaigns.stream()
+                .map(c -> {
+                    List<UserNewsDto> users = Collections.emptyList();
+                    if (!c.isHiddenAlways()) {
+                        users = c.getBadgeAssignments().stream().flatMap(ba -> ba.getToUsers().stream().distinct()).map(userConverter::convertForNews).collect(Collectors.toList());
+                    }
+                    return new AchtungNewsDto().setEntityId(c.getId())
+                            .setComment(c.getDescription())
+                            .setActionRequired(ActionRequiredType.LOOK_AT_CAMPAIGN_RESULTS)
+                            .setImageUrl(c.getImageUrl())
+                            .setToUsers(users);
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<AchtungNewsDto> getActiveCampaigns() {
+        List<Campaign> activeCampaigns = campaignRepository.findActiveCampaigns(new Date());
+
+        return activeCampaigns.stream()
+                .map(c -> {
+                    List<UserNewsDto> users = Collections.emptyList();
+                    if (!c.isHiddenAlways() && !c.isHiddenBeforeEnd()) {
+                        users = c.getBadgeAssignments().stream().flatMap(ba -> ba.getToUsers().stream().distinct()).map(userConverter::convertForNews).collect(Collectors.toList());
+                    }
+                    return new AchtungNewsDto().setEntityId(c.getId())
+                            .setComment(c.getDescription())
+                            .setActionRequired(ActionRequiredType.LOOK_AT_CAMPAIGN_RESULTS)
+                            .setImageUrl(c.getImageUrl())
+                            .setToUsers(users);
+                })
                 .collect(Collectors.toList());
     }
 }

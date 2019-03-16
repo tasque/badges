@@ -1,10 +1,12 @@
 package org.badges.api.domain.news;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(of = {"entityId", "comment", "imageUrl"})
 public class AchtungNewsDto {
 
     private Long id;

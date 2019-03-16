@@ -74,6 +74,7 @@ public class NewsController {
                         .setComment(b.getName()))
                 .forEach(result::add);
 
+        result.addAll(campaignService.getRecentCampaigns(catalogue));
 
         Optional<Badge> happyBirthday = catalogue.stream()
                 .filter(b -> b.getName().contains("Happy Birthday"))
@@ -92,7 +93,6 @@ public class NewsController {
             }
         }
 
-        result.addAll(campaignService.getRecentCampaigns());
 
 
         return new PageImpl<>(result);
