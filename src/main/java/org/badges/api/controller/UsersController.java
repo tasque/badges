@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +46,7 @@ public class UsersController {
     }
 
     @GetMapping("/byIds")
-    public List<UserDto> getByIds(Collection<Long> ids) {
+    public List<UserDto> getByIds(List<Long> ids) {
         return userRepository.findAll(ids).stream()
                 .map(userConverter::convertUser)
                 .collect(Collectors.toList());
