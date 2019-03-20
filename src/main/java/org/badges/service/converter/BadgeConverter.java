@@ -3,6 +3,7 @@ package org.badges.service.converter;
 import lombok.RequiredArgsConstructor;
 import org.badges.api.domain.admin.AdminBadge;
 import org.badges.api.domain.catalog.CatalogBadge;
+import org.badges.api.domain.catalog.CatalogBadgeSettings;
 import org.badges.api.domain.news.BadgeNewsDto;
 import org.badges.db.Badge;
 import org.badges.db.News;
@@ -42,18 +43,23 @@ public class BadgeConverter {
                 .setName(badge.getName())
                 .setDescription(badge.getDescription())
                 .setImageUrl(badge.getImageUrl())
-                .setCountLeft(getCountLeft(badge, currentUserId))
-                .setSpecial(badge.getCampaign() != null);
+                .setSettings(getBadgeSettings(badge, currentUserId));
     }
 
-    private Integer getCountLeft(Badge badge, Long currentUserId) {
+    private CatalogBadgeSettings getBadgeSettings(Badge badge, Long currentUserId) {
         Campaign campaign = badge.getCampaign();
         if (campaign == null) {
             return null;
         }
+        CatalogBadgeSettings settings = new CatalogBadgeSettings();
+        settings.setSpecial(true);
         int elapsed = badgeAssignmentRepository.findAllByAssignerIdAndBadgeIdAndDateAfter(currentUserId, badge.getId(), campaign.getStartDate())
                 .size();
-        return campaign.getCountPerCampaign() - elapsed;
+
+        settings.setCountLeft(campaign.getCountPerCampaign() - elapsed);
+        settings.setToUsersMax(campaign.getToUsersMax());
+
+        return settings;
     }
 
     public BadgeNewsDto badgeNews(News news) {

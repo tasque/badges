@@ -17,7 +17,5 @@ public class CatalogBadge {
 
     private String imageUrl;
 
-    private Integer countLeft;
-
-    private boolean special;
+    private CatalogBadgeSettings settings;
 }
