@@ -75,6 +75,7 @@ public class CampaignService {
         Collection<Campaign> campaigns = catalogue.stream()
                 .map(Badge::getCampaign)
                 .filter(Objects::nonNull)
+                .filter(campaign -> !campaign.isHiddenBeforeEnd())
                 .filter(campaign -> !campaign.getBadgeAssignments().isEmpty())
                 .collect(Collectors.toSet());
 

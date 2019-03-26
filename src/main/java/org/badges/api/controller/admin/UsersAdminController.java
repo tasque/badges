@@ -72,8 +72,8 @@ public class UsersAdminController {
             user.setNativeName(getStringCellValue(row.getCell(0)))
                     .setName(getStringCellValue(row.getCell(1)))
                     .setTitle(getStringCellValue(row.getCell(2)))
-                    .setDateOfBirth(row.getCell(4).getDateCellValue())
-                    .setMessenger(getStringCellValue(row.getCell(5)))
+                    .setMessenger(getStringCellValue(row.getCell(4)))
+                    .setDateOfBirth(row.getCell(5).getDateCellValue())
                     .setEnabled(true);
 
             usersByEmail.remove(email);
