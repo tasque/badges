@@ -74,7 +74,9 @@ public class CampaignService {
 
         Collection<Campaign> campaigns = catalogue.stream()
                 .map(Badge::getCampaign)
-                .filter(Objects::nonNull).collect(Collectors.toSet());
+                .filter(Objects::nonNull)
+                .filter(campaign -> !campaign.getBadgeAssignments().isEmpty())
+                .collect(Collectors.toSet());
 
         List<Campaign> recentCampaigns = campaignRepository.findRecentCampaigns(currentUserId, now);
         recentCampaigns.stream()
