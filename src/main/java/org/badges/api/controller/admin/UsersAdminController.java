@@ -73,7 +73,7 @@ public class UsersAdminController {
                     .setName(getStringCellValue(row.getCell(1)))
                     .setTitle(getStringCellValue(row.getCell(2)))
                     .setMessenger(getStringCellValue(row.getCell(4)))
-                    .setDateOfBirth(row.getCell(5).getDateCellValue())
+//                    .setDateOfBirth(row.getCell(5).getDateCellValue())
                     .setEnabled(true);
 
             usersByEmail.remove(email);
