@@ -2,6 +2,7 @@ package org.badges.api.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.badges.api.domain.ImportBadgeAssignment;
 import org.badges.api.domain.catalog.CatalogBadge;
 import org.badges.api.domain.news.NewsDto;
@@ -28,6 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/badges")
 @RequiredArgsConstructor
+@Slf4j
 public class BadgesController {
 
     private final BadgeAssignmentService badgeAssignmentService;
@@ -61,6 +63,7 @@ public class BadgesController {
 
     @PostMapping("/assign")
     public NewsDto assignBadge(@RequestBody ImportBadgeAssignment importBadgeAssignment) {
+        log.info("News badge assignment is {}", importBadgeAssignment);
         News news = badgeAssignmentService.assignBadge(importBadgeAssignment);
         notificationService.notifyUsers(news);
 
