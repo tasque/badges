@@ -18,11 +18,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -94,15 +96,15 @@ public class CampaignService {
 
         return campaigns.stream()
                 .map(c -> {
-                    List<UserNewsDto> users = Collections.emptyList();
+                    Set<UserNewsDto> users = Collections.emptySet();
                     if (!c.isHiddenAlways()) {
-                        users = c.getBadgeAssignments().stream().flatMap(ba -> ba.getToUsers().stream().distinct()).map(userConverter::convertForNews).collect(Collectors.toList());
+                        users = c.getBadgeAssignments().stream().flatMap(ba -> ba.getToUsers().stream().distinct()).map(userConverter::convertForNews).collect(Collectors.toSet());
                     }
                     return new AchtungNewsDto().setEntityId(c.getId())
                             .setComment(c.getDescription())
                             .setActionRequired(ActionRequiredType.LOOK_AT_CAMPAIGN_RESULTS)
                             .setImageUrl(c.getImageUrl())
-                            .setToUsers(users);
+                            .setToUsers(new ArrayList<>(users));
                 })
                 .collect(Collectors.toList());
     }

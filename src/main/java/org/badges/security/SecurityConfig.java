@@ -44,7 +44,7 @@ public class SecurityConfig
     @Bean
     public AuthenticationProvider activeDirectoryLdapAuthenticationProvider() {
         ActiveDirectoryLdapAuthenticationProvider provider = new ActiveDirectoryLdapAuthenticationProvider(
-                "mara.local", "ldap://ad-auth.mara.local");
+                "mara.local", "ldap://ad-auth.mara.local", "OU=Developers,OU=Users,OU=CSSU,OU=Minsk,OU=AD,DC=mara,DC=local");
 
         provider.setConvertSubErrorCodesToExceptions(true);
         provider.setUseAuthenticationRequestCredentials(true);

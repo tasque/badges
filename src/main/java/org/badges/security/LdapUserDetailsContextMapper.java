@@ -32,6 +32,16 @@ public class LdapUserDetailsContextMapper implements UserDetailsContextMapper {
         Object mail = ctx.getObjectAttribute("mail");
         log.debug("User mail is {}", mail);
         User currentUser = userRepository.findByEmail(mail.toString());
+
+        if (currentUser == null && "iFuture".equalsIgnoreCase(ctx.getObjectAttribute("company").toString())) {
+            log.warn("going to create new user " + ctx);
+            currentUser = userRepository.save(new User()
+                    .setTitle(ctx.getObjectAttribute("title").toString())
+                    .setEmail(mail.toString())
+                    .setName(ctx.getObjectAttribute("displayname").toString())
+                    .setEnabled(true)
+                    .setImageUrl("https://png.pngtree.com/svg/20170914/d78a96cd9e.png"));
+        }
         if (currentUser == null || currentUser.isDisabled()) {
             log.warn("Username {}, Context {}, User {}", username, ctx, currentUser);
             throw new RuntimeException("User disabled");
