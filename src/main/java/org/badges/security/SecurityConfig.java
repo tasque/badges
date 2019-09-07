@@ -1,6 +1,7 @@
 package org.badges.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,6 +15,14 @@ import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAu
 public class SecurityConfig
         extends WebSecurityConfigurerAdapter {
 
+    @Value("${ldap.domain}")
+    private String domain;
+
+    @Value("${ldap.url}")
+    private String url;
+
+    @Value("${ldap.rootDn}")
+    private String rootDn;
 
     @Autowired
     private LdapUserDetailsContextMapper ldapUserDetailsContextMapper;
@@ -44,7 +53,7 @@ public class SecurityConfig
     @Bean
     public AuthenticationProvider activeDirectoryLdapAuthenticationProvider() {
         ActiveDirectoryLdapAuthenticationProvider provider = new ActiveDirectoryLdapAuthenticationProvider(
-                "mara.local", "ldap://ad-auth.mara.local", "OU=Developers,OU=Users,OU=CSSU,OU=Minsk,OU=AD,DC=mara,DC=local");
+                domain, url, rootDn);
 
         provider.setConvertSubErrorCodesToExceptions(true);
         provider.setUseAuthenticationRequestCredentials(true);
