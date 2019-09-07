@@ -45,5 +45,11 @@ public class UsersController {
         return userConverter.currentUser(requestContext.getCurrentUser());
     }
 
+    @GetMapping("/byIds")
+    public List<UserDto> getByIds(List<Long> ids) {
+        return userRepository.findAll(ids).stream()
+                .map(userConverter::convertUser)
+                .collect(Collectors.toList());
+    }
 
 }

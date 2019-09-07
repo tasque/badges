@@ -17,4 +17,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
                     "and u.id != :id " +
                     "limit :size")
     List<User> findUsers(@Param("search") String search, @Param("id") Long id, @Param("size") int size);
+
+    User findByEmail(String email);
+
+    @Query(nativeQuery = true, value =
+            "select distinct u.* from public.user u " +
+                    "left join user_badge_assignment uba on u.id = uba.user_id " +
+                    "left join badge_assignment ba on uba.badge_assignment_id = ba.id " +
+                    "       and date(ba.date) = date (now()) " +
+                    "       and ba.badge_id = :badgeId " +
+                    "       and ba.assigner_id = :userId " +
+                    "where u.date_of_birth = date (now()) " +
+                    "   and u.id != :userId " +
+                    "   and ba.id is null")
+    List<User> findUsersWithoutHappyBirthday(@Param("badgeId") Long badgeId, @Param("userId") Long userId);
 }

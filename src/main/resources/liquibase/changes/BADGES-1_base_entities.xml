@@ -112,4 +112,13 @@
     </changeSet>
 
 
+
+
+    <changeSet id="BADGES-1-7 - add date of birth for users" author="Pavel N">
+        <addColumn tableName="user">
+            <column name="date_of_birth" type="date"/>
+            <column name="messenger" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

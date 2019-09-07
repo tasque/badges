@@ -9,6 +9,11 @@ spring:
     properties:
       hibernate.temp.use_jdbc_metadata_defaults: false
     show-sql: false
+  http:
+    encoding:
+      force: true
+      enabled: true
+      charset: UTF-8
 
 liquibase:
   change-log: classpath:/liquibase/changes.xml
@@ -35,3 +40,7 @@ server:
     timeout: 1800
     cookie:
       max-age: 172800
+ldap:
+  domain: ''
+  url: ''
+  rootDn: ''
