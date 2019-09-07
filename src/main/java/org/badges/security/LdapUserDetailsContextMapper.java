@@ -27,7 +27,7 @@ public class LdapUserDetailsContextMapper implements UserDetailsContextMapper {
     private final UserRepository userRepository;
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public UserDetails mapUserFromContext(DirContextOperations ctx, String username, Collection<? extends GrantedAuthority> authorities) {
         Object mail = ctx.getObjectAttribute("mail");
         log.debug("User mail is {}", mail);
