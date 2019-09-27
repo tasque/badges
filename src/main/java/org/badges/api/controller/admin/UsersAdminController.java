@@ -2,6 +2,7 @@ package org.badges.api.controller.admin;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -66,19 +67,23 @@ public class UsersAdminController {
         XSSFSheet sheet = workbook.getSheetAt(0);
         sheet.forEach(row -> {
             String email = getStringCellValue(row.getCell(3));
-            User user = usersByEmail.computeIfAbsent(email,
-                    key -> userRepository.save(new User().setName("").setEmail(email)));
+            if (StringUtils.isNotBlank(email)) {
+                User user = usersByEmail.computeIfAbsent(email,
+                        key -> userRepository.save(new User().setName("").setEmail(email)));
 
-            user.setNativeName(getStringCellValue(row.getCell(0)))
-                    .setName(getStringCellValue(row.getCell(1)))
-                    .setTitle(getStringCellValue(row.getCell(2)))
-                    .setMessenger(getStringCellValue(row.getCell(4)))
-//                    .setDateOfBirth(row.getCell(5).getDateCellValue())
-                    .setEnabled(true);
+                user.setNativeName(getStringCellValue(row.getCell(0)))
+                        .setName(getStringCellValue(row.getCell(1)))
+                        .setTitle(getStringCellValue(row.getCell(2)))
+                        .setMessenger(getStringCellValue(row.getCell(4)))
+                        .setEnabled(true);
 
-            usersByEmail.remove(email);
+                usersByEmail.remove(email);
+            }
         });
-        usersByEmail.values().forEach(u -> u.setEnabled(false));
+        usersByEmail.values().forEach(u -> {
+            u.setEnabled(false);
+            log.info("User {} was disabled", u);
+        });
 
         return Collections.emptyList();
     }
