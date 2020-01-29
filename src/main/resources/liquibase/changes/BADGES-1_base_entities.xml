@@ -121,4 +121,10 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="BADGES-1-8 - add admin users" author="Pavel N">
+        <addColumn tableName="user">
+            <column name="enabled" type="BOOLEAN" defaultValueBoolean="false"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

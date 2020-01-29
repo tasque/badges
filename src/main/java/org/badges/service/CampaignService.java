@@ -7,6 +7,7 @@ import org.badges.api.domain.news.CampaignBadgeAssignmentNews;
 import org.badges.api.domain.news.UserNewsDto;
 import org.badges.db.Badge;
 import org.badges.db.NewsVisibility;
+import org.badges.db.User;
 import org.badges.db.UserViewEventType;
 import org.badges.db.campaign.Campaign;
 import org.badges.db.repository.CampaignRepository;
@@ -44,21 +45,24 @@ public class CampaignService {
     @Transactional
     public Collection<CampaignBadgeAssignmentNews> news(Long id) {
         Campaign campaign = campaignRepository.getOne(id);
+        User currentUser = requestContext.getCurrentUser();
 
-        if (campaign.isHiddenAlways()) {
-            throw new EntityNotFoundException("Campaign is hidden");
-        }
-        Date now = new Date();
-        if (campaign.isHiddenBeforeEnd() && campaign.getEndDate().after(now)) {
-            throw new EntityNotFoundException("Campaign is not open yet");
+        if (!currentUser.isAdmin()) {
+            if (campaign.isHiddenAlways()) {
+                throw new EntityNotFoundException("Campaign is hidden");
+            }
+            Date now = new Date();
+            if (campaign.isHiddenBeforeEnd() && campaign.getEndDate().after(now)) {
+                throw new EntityNotFoundException("Campaign is not open yet");
+            }
+            if (campaign.outOfDate(now)) {
+                userNewsViewRepository.saveQuietly(currentUser.getId(), campaign.getId(), UserViewEventType.OPEN_CAMPAIGN_RESULTS.name());
+            }
         }
 
-        if (campaign.outOfDate(now)) {
-            userNewsViewRepository.saveQuietly(requestContext.getCurrentUserId(), campaign.getId(), UserViewEventType.OPEN_CAMPAIGN_RESULTS.name());
-        }
 
         return campaign.getBadgeAssignments().stream()
-                .filter(ba -> ba.getNews().getNewsVisibility() == NewsVisibility.PUBLIC)
+                .filter(ba -> currentUser.isAdmin() || ba.getNews().getNewsVisibility() == NewsVisibility.PUBLIC)
                 .map(ba -> new CampaignBadgeAssignmentNews()
                         .setAssigner(userConverter.convertForNews(ba.getAssigner()))
                         .setBadge(badgeConverter.badgeNews(ba.getBadge()))

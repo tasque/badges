@@ -62,6 +62,8 @@ public class User {
 
     private String messenger;
 
+    private boolean admin;
+
     public boolean isDisabled() {
         return !enabled;
     }
